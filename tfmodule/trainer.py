@@ -109,8 +109,6 @@ def train(dataset_train, dataset_test):
         train_handle    = sess.run(dataset_train_iterator.string_handle())
         test_handle     = sess.run(dataset_test_iterator.string_handle())
 
-        rate_record_index = 0
-
         for epoch in range(train_config.training_epochs):
 
             train_start_time = time.time()
@@ -160,7 +158,6 @@ def train(dataset_train, dataset_test):
 
 if __name__ == '__main__':
     tf.logging.set_verbosity(tf.logging.INFO)
-
 
 
     # dataloader instance gen
