@@ -28,6 +28,7 @@ from path_manager import EXPORT_DIR
 from path_manager import COCO_DATALOAD_DIR
 from path_manager import DATASET_DIR
 
+
 sys.path.insert(0,TF_MODULE_DIR)
 sys.path.insert(0,EXPORT_DIR)
 sys.path.insert(0,COCO_DATALOAD_DIR)
