@@ -102,3 +102,9 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+.zip
+.png
+.jpg
+
+#dataset
+ai_challenger*
