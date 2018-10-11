@@ -41,4 +41,8 @@ DATASET_DIR                 = PROJ_HOME     + '/dataset/ai_challenger'
 COCO_TRAINSET_DIR            = DATASET_DIR     + '/train/'
 COCO_VALIDSET_DIR            = DATASET_DIR     + '/valid/'
 
+print("[pathmanager] DATASET_DIR = %s" % DATASET_DIR)
+print("[pathmanager] COCO_DATALOAD_DIR = %s" % COCO_DATALOAD_DIR)
+print("[pathmanager] EXPORT_DIR = %s" % EXPORT_DIR)
+
 
