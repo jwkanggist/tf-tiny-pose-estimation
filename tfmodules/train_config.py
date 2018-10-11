@@ -28,12 +28,12 @@ class TrainConfig(object):
 
     def __init__(self):
 
-        self.learning_rate              = 1e-3
-        self.learning_rate_decay_step   = 2000
-        self.learning_rate_decay_rate   = 0.95
+        self.learning_rate              =
+        self.learning_rate_decay_step   =
+        self.learning_rate_decay_rate   =
         self.opt_fn                 = tf.train.AdamOptimizer
         self.loss_fn                = tf.nn.l2_loss
-        self.batch_size             = 8
+        self.batch_size             =
 
 
         # the number of step between evaluation

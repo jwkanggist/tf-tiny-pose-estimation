@@ -34,21 +34,8 @@ class ModelBuilder(object):
     def get_model(self, model_in,scope):
 
         with tf.variable_scope(name_or_scope=scope, values=[model_in]):
-            net = self._get_reception_layer(ch_in                       =model_in,
-                                           num_outputs                  =self._model_config.channel_num,
-                                           model_config                 =self._model_config.reception,
-                                           model_config_separable_conv  =self._model_config.separable_conv,
-                                           scope                        ='reception')
+        # < complete codes here >
 
-            net = self._get_hourglass_layer(ch_in                       =net,
-                                           model_config                 =self._model_config.hourglass,
-                                           model_config_separable_conv  =self._model_config.separable_conv,
-                                           scope                        ='hourglass')
-
-            model_out = self._get_output_layer(ch_in                    =net,
-                                               num_outputs              =self._model_config.output_chnum,
-                                               model_config             =self._model_config.output,
-                                               scope                    ='output')
         tf.logging.info('[ModelBuilder] model building complete')
         tf.logging.info('[ModelBuilder] model output shape = %s'%model_out.shape)
         return model_out
@@ -66,36 +53,7 @@ class ModelBuilder(object):
                             scope='recept'):
 
         with tf.variable_scope(name_or_scope=scope,values=[ch_in]):
-            net = slim.conv2d(inputs                =ch_in,
-                              num_outputs           =num_outputs,
-                              kernel_size           =model_config.kernel_shape['r1'],
-                              stride                =model_config.strides['r1'],
-                              weights_initializer   =model_config.weights_initializer,
-                              biases_initializer    =model_config.biases_initializer,
-                              normalizer_fn         =None,
-                              activation_fn         =None,
-                              padding               ='SAME',
-                              trainable             =model_config.is_trainable,
-                              scope='7x7conv')
-
-            net = slim.batch_norm(  inputs= net,
-                                    decay       =model_config.batch_norm_decay,
-                                    fused       =model_config.batch_norm_fused,
-                                    is_training =model_config.is_trainable,
-                                    activation_fn=model_config.activation_fn,
-                                    scope='batch_norm_7x7conv')
-
-            net = self._get_separable_conv2d(ch_in          =net,
-                                            ch_out_num      =num_outputs,
-                                            model_config    =model_config_separable_conv,
-                                            scope='separable_conv')
-
-
-            net = slim.max_pool2d(inputs=net,
-                                  kernel_size   =model_config.kernel_shape['r4'],
-                                  stride        =model_config.strides['r4'],
-                                  padding       ='SAME',
-                                  scope='maxpool')
+        # < complete codes here >
 
         return net
 
@@ -111,24 +69,8 @@ class ModelBuilder(object):
 
 
         with tf.variable_scope(name_or_scope=scope, values=[ch_in]):
-            net = slim.conv2d(inputs                =ch_in,
-                              num_outputs           =num_outputs,
-                              kernel_size           =model_config.kernel_shape,
-                              stride                =model_config.stride,
-                              weights_initializer   =model_config.weights_initializer,
-                              weights_regularizer   =model_config.weights_regularizer,
-                              biases_initializer    =model_config.biases_initializer,
-                              normalizer_fn         =None,
-                              activation_fn         =None,
-                              padding='SAME',
-                              trainable             =model_config.is_trainable,
-                              scope='1x1conv')
+        # < complete codes here >
 
-            out = slim.dropout(inputs= net,
-                               keep_prob=self.dropout_keeprate)
-
-            if model_config.activation_fn is not None:
-                out = model_config.activation_fn(out)
         return out
 
 
@@ -144,29 +86,7 @@ class ModelBuilder(object):
         ch_in_num = ch_in.get_shape().as_list()[3]
         with tf.variable_scope(name_or_scope=scope,values=[ch_in]):
 
-            downsample_out_stack = []
-            net = ch_in
-            for down_index in range(0,model_config.num_stage):
-                net = self.downsample_hourglass(ch_in                       =net,
-                                                model_config                =model_config,
-                                                model_config_separable_conv =model_config_separable_conv,
-                                                scope                       ='downsample_'+str(down_index))
-                downsample_out_stack.append(net)
-
-            center = self._get_separable_conv2d(ch_in           =net,
-                                                ch_out_num      =ch_in_num,
-                                                model_config    =model_config_separable_conv,
-                                                scope           ='separable_conv')
-
-            # add skip connection
-            net = center
-            for up_index in range(0,model_config.num_stage):
-                net = tf.add(x=net, y=downsample_out_stack.pop())
-
-                net = self.upsample_hourglass(ch_in                         =net,
-                                              model_config                  =model_config,
-                                              model_config_separable_conv   =model_config_separable_conv,
-                                              scope                         ='upsample_'+str(up_index))
+        # < complete codes here >
 
         return net
 
@@ -181,15 +101,8 @@ class ModelBuilder(object):
 
         ch_in_num   = ch_in.get_shape().as_list()[3]
         with tf.variable_scope(name_or_scope=scope,values=[ch_in]):
-            net = self._get_separable_conv2d(ch_in       = ch_in,
-                                            ch_out_num  = ch_in_num,
-                                            model_config= model_config_separable_conv,
-                                            scope       = 'separable_conv')
-            net = slim.max_pool2d(inputs        =net,
-                                  kernel_size   =model_config.maxpool_kernel_size,
-                                  stride        =model_config.updown_rate,
-                                  padding       ='SAME',
-                                  scope='maxpool')
+        # < complete codes here >
+
         return net
 
 
@@ -208,15 +121,7 @@ class ModelBuilder(object):
 
         ch_in_num   = input_shape[3]
         with tf.variable_scope(name_or_scope=scope,values=[ch_in]):
-            net = tf.image.resize_bilinear(images       =ch_in,
-                                           size         =output_shape,
-                                           align_corners=False,
-                                           name         ='resize')
-
-            net = self._get_separable_conv2d(ch_in       =net,
-                                            ch_out_num  =ch_in_num,
-                                            model_config=model_config_separable_conv,
-                                            scope       ='separable_conv')
+        # < complete codes here >
 
         return net
 

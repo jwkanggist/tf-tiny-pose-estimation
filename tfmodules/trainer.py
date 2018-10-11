@@ -60,29 +60,10 @@ def train(dataset_train, dataset_test):
     # model building =========================
     with tf.device('/device:CPU:0'):
         # < complete codes here >
-        modelbuilder = ModelBuilder(model_config=model_config)
-        pred_heatmap = modelbuilder.get_model(model_in=inputs,
-                                              scope='model')
+
 
     # traning ops =============================================
         # < complete codes here >
-        loss_heatmap        = train_config.loss_fn(true_heatmap - pred_heatmap) / train_config.batch_size
-        loss_regularizer    = tf.losses.get_regularization_loss()
-        loss_op             = loss_heatmap + loss_regularizer
-
-        global_step = tf.Variable(0, trainable=False)
-        batchnum_per_epoch  = np.floor(train_config.train_data_size / train_config.batch_size)
-
-
-        lr_op = tf.train.exponential_decay(learning_rate=train_config.learning_rate,
-                                           global_step=global_step,
-                                           decay_steps=train_config.learning_rate_decay_step,
-                                           decay_rate=train_config.learning_rate_decay_rate,
-                                           staircase=True)
-
-        opt_op      = train_config.opt_fn(learning_rate=lr_op,name='opt_op')
-        train_op    = opt_op.minimize(loss_op, global_step)
-
 
 
     # For Tensorboard ===========================================
