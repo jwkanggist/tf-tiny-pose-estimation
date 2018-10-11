@@ -20,7 +20,6 @@ import tensorflow as tf
 import numpy as np
 import time
 import sys
-import os
 
 
 from path_manager import TF_MODULE_DIR
