@@ -49,6 +49,8 @@ class ModelBuilder(object):
                                                num_outputs              =self._model_config.output_chnum,
                                                model_config             =self._model_config.output,
                                                scope                    ='output')
+        tf.logging.info('[ModelBuilder] model building complete')
+        tf.logging.info('[ModelBuilder] model output shape = %s'%model_out.shape)
         return model_out
 
 
@@ -72,6 +74,7 @@ class ModelBuilder(object):
                               biases_initializer    =model_config.biases_initializer,
                               normalizer_fn         =None,
                               activation_fn         =None,
+                              padding               ='SAME',
                               trainable             =model_config.is_trainable,
                               scope='7x7conv')
 
@@ -91,6 +94,7 @@ class ModelBuilder(object):
             net = slim.max_pool2d(inputs=net,
                                   kernel_size   =model_config.kernel_shape['r4'],
                                   stride        =model_config.strides['r4'],
+                                  padding       ='SAME',
                                   scope='maxpool')
 
         return net
@@ -116,6 +120,7 @@ class ModelBuilder(object):
                               biases_initializer    =model_config.biases_initializer,
                               normalizer_fn         =None,
                               activation_fn         =None,
+                              padding='SAME',
                               trainable             =model_config.is_trainable,
                               scope='1x1conv')
 
@@ -154,9 +159,9 @@ class ModelBuilder(object):
                                                 scope           ='separable_conv')
 
             # add skip connection
-
+            net = center
             for up_index in range(0,model_config.num_stage):
-                net = tf.add(x=center, y=downsample_out_stack.pop())
+                net = tf.add(x=net, y=downsample_out_stack.pop())
 
                 net = self.upsample_hourglass(ch_in                         =net,
                                               model_config                  =model_config,
@@ -183,6 +188,7 @@ class ModelBuilder(object):
             net = slim.max_pool2d(inputs        =net,
                                   kernel_size   =model_config.maxpool_kernel_size,
                                   stride        =model_config.updown_rate,
+                                  padding       ='SAME',
                                   scope='maxpool')
         return net
 
@@ -243,7 +249,7 @@ class ModelBuilder(object):
                 # depthwise conv with 3x3 kernal
                 net = slim.separable_convolution2d(inputs               =net,
                                                    num_outputs          =None,
-                                                   kernel_size          =[kernel_size, kernel_size],
+                                                   kernel_size          =kernel_size,
                                                    depth_multiplier     =1.0,
                                                    stride               =[stride, stride],
                                                    padding              =conv2d_padding,

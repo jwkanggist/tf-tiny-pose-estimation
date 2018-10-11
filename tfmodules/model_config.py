@@ -78,7 +78,7 @@ class HourglassConfig(object):
 
         self.updown_rate            = 2
         self.maxpool_kernel_size    =[3,3]
-        self.num_stage              = 4
+        self.num_stage              = 3
 
 
 

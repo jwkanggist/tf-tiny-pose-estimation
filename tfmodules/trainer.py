@@ -58,7 +58,7 @@ def train(dataset_train, dataset_test):
     inputs, true_heatmap =  dataset_iterator.get_next()
 
     # model building =========================
-    with tf.device('/device:GPU:0'):
+    with tf.device('/device:CPU:0'):
         # < complete codes here >
         modelbuilder = ModelBuilder(model_config=model_config)
         pred_heatmap = modelbuilder.get_model(model_in=inputs,
@@ -70,20 +70,18 @@ def train(dataset_train, dataset_test):
         loss_regularizer    = tf.losses.get_regularization_loss()
         loss_op             = loss_heatmap + loss_regularizer
 
-
-        global_step_op      = tf.train.get_global_step()
+        global_step = tf.Variable(0, trainable=False)
         batchnum_per_epoch  = np.floor(train_config.train_data_size / train_config.batch_size)
-        current_epoch       = (tf.cast(global_step_op, tf.float32) /
-                                batchnum_per_epoch)
+
 
         lr_op = tf.train.exponential_decay(learning_rate=train_config.learning_rate,
-                                           global_step=global_step_op,
+                                           global_step=global_step,
                                            decay_steps=train_config.learning_rate_decay_step,
                                            decay_rate=train_config.learning_rate_decay_rate,
                                            staircase=True)
 
         opt_op      = train_config.opt_fn(learning_rate=lr_op,name='opt_op')
-        train_op    = opt_op.minimize(loss_op, global_step_op)
+        train_op    = opt_op.minimize(loss_op, global_step)
 
 
 
@@ -115,19 +113,18 @@ def train(dataset_train, dataset_test):
             train_start_time = time.time()
 
             # train model
-            _,global_step,loss_train = sess.run([train_op,
-                                                 global_step_op,
-                                                 loss_op],
-                                                 feed_dict={dataset_handle: train_handle,
-                                                 modelbuilder.dropout_keeprate:model_config.output.dropout_keeprate})
+            _,loss_train = sess.run([train_op,loss_op],
+                                     feed_dict={dataset_handle: train_handle,
+                                     modelbuilder.dropout_keeprate:model_config.output.dropout_keeprate})
 
 
             train_elapsed_time = time.time() - train_start_time
 
+            global_step_eval = global_step.eval()
 
             if train_config.display_step == 0:
                 continue
-            elif global_step % train_config.display_step == 0:
+            elif global_step_eval % train_config.display_step == 0:
 
                 # test model
                 loss_test = loss_op.eval(feed_dict={dataset_handle: test_handle,
@@ -142,11 +139,11 @@ def train(dataset_train, dataset_test):
 
                 summary_lr         = tb_summary_lr.eval()
 
-                file_writer.add_summary(summary_loss_train,global_step)
-                file_writer.add_summary(summary_loss_test,global_step)
-                file_writer.add_summary(summary_lr,global_step)
+                file_writer.add_summary(summary_loss_train,global_step_eval)
+                file_writer.add_summary(summary_loss_test,global_step_eval)
+                file_writer.add_summary(summary_lr,global_step_eval)
 
-                print('At step = %d, train elapsed_time = %.1f ms' % (global_step, train_elapsed_time))
+                print('At step = %d, train elapsed_time = %.1f ms' % (global_step_eval, train_elapsed_time))
                 print("Training set loss (avg over batch)= %.2f %%  " % (loss_train))
                 print("Test set Err loss (total batch)= %.2f %%" % (loss_test))
                 print("--------------------------------------------")
@@ -162,13 +159,15 @@ if __name__ == '__main__':
 
 
     # dataloader instance gen
-    dataset_train, dataset_test = \
+    dataloader_train, dataloader_test = \
         [DataLoader(
         is_training     =is_training,
         data_dir        =DATASET_DIR,
         transpose_input =False,
         use_bfloat16    =False) for is_training in [True, False]]
 
+    dataset_train = dataloader_train.input_fn()
+    dataset_test  = dataloader_test.input_fn()
 
     # model tranining
     with tf.name_scope(name='trainer', values=[dataset_train, dataset_test]):

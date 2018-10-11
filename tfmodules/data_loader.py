@@ -107,6 +107,7 @@ class DataLoader(object):
         if ann is not None:
             TRAIN_ANNO = ann
 
+        print('imgId = %s' % imgId)
         img_meta = TRAIN_ANNO.loadImgs([imgId])[0]
         anno_ids = TRAIN_ANNO.getAnnIds(imgIds=imgId)
         img_anno = TRAIN_ANNO.loadAnns(anno_ids)
