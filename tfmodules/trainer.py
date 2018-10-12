@@ -45,20 +45,19 @@ def train(dataset_train, dataset_test):
     model_config = ModelConfig()
     train_config = TrainConfig()
 
-    # build dataset ========================
-
     dataset_handle = tf.placeholder(tf.string, shape=[])
     dataset_train_iterator = dataset_train.make_one_shot_iterator()
-    dataset_test_iterator  = dataset_test.make_one_shot_iterator()
+    # dataset_test_iterator  = dataset_test.make_one_shot_iterator()
 
-    # dataset_train_iterator = dataset_train.make_initializable_iterator()
-    # dataset_test_iterator  = dataset_test.make_initializable_iterator()
+    inputs = tf.placeholder(dtype=model_config.dtype, shape=[train_config.batch_size,
+                                                             model_config._input_size,
+                                                             model_config._input_size,
+                                                             model_config.input_chnum])
 
-
-    dataset_iterator = tf.data.Iterator.from_string_handle(dataset_handle,
-                                                           dataset_train.output_types,
-                                                           dataset_train.output_shapes)
-    inputs, true_heatmap =  dataset_iterator.get_next()
+    true_heatmap = tf.placeholder(dtype=model_config.dtype, shape=[train_config.batch_size,
+                                                                   model_config._output_size,
+                                                                   model_config._output_size,
+                                                                   model_config.output_chnum])
 
     # model building =========================
     with tf.device('/device:CPU:0'):
@@ -104,25 +103,36 @@ def train(dataset_train, dataset_test):
     print('[train] training_epochs = %s' % train_config.training_epochs)
     print('------------------------------------')
 
+
+
+    # build dataset ========================
+
+    # inputs_test_op, true_heatmap_test_op =  dataset_test_iterator.get_next()
+    inputs_train_op, true_heatmap_train_op =  dataset_train_iterator.get_next()
+
     with tf.Session() as sess:
         # Run the variable initializer
         sess.run(init_var)
-        # sess.run(dataset_train_iterator.initializer)
-        # sess.run(dataset_test_iterator.initializer)
 
-        train_handle    = sess.run(dataset_train_iterator.string_handle())
-        test_handle     = sess.run(dataset_test_iterator.string_handle())
+        # train_handle    = sess.run(dataset_train_iterator.string_handle())
+        # test_handle     = sess.run(dataset_test_iterator.string_handle())
 
         for epoch in range(train_config.training_epochs):
+
+            inputs_train,true_heatmap_train = sess.run([inputs_train_op,true_heatmap_train_op])
+            # inputs_valid,true_heatmap_valid  = sess.run([inputs_test_op,true_heatmap_test_op])
 
             train_start_time = time.time()
 
             # train model
-            tf.logging.info('[training sess]')
-            _,loss_train = sess.run([train_op,loss_op],
-                                     feed_dict={dataset_handle: train_handle,
-                                     modelbuilder.dropout_keeprate:model_config.output.dropout_keeprate})
+            # _,loss_train = sess.run([train_op,loss_op],
+            #                          feed_dict={dataset_handle: train_handle,
+            #                          modelbuilder.dropout_keeprate:model_config.output.dropout_keeprate})
 
+            _,loss_train = sess.run([train_op,loss_op],
+                                     feed_dict={inputs: inputs_train,
+                                                true_heatmap: true_heatmap_train,
+                                                modelbuilder.dropout_keeprate:model_config.output.dropout_keeprate})
 
             train_elapsed_time = time.time() - train_start_time
 
@@ -131,28 +141,40 @@ def train(dataset_train, dataset_test):
             if train_config.display_step == 0:
                 continue
             elif global_step_eval % train_config.display_step == 0:
+                print('[train] curr epochs = %s' % epoch)
 
-                # test model
-                tf.logging.info('[test sess]')
-                loss_test = loss_op.eval(feed_dict={dataset_handle: test_handle,
-                                                    modelbuilder.dropout_keeprate: 1.0})
+                # # test model
+                # loss_test = loss_op.eval(feed_dict={dataset_handle: test_handle,
+                #                                     modelbuilder.dropout_keeprate: 1.0})
+                #
+                # loss_test = loss_op.eval( feed_dict={inputs: inputs_valid,
+                #                                     true_heatmap: true_heatmap_valid,
+                #                                     modelbuilder.dropout_keeprate: 1.0})
 
                 # tf summary
-                summary_loss_train = tb_summary_loss_train.eval(feed_dict={dataset_handle: train_handle,
-                                                                           modelbuilder.dropout_keeprate:1.0})
+                summary_loss_train = tb_summary_loss_train.eval(feed_dict={inputs: inputs_train,
+                                                                            true_heatmap: true_heatmap_train,
+                                                                            modelbuilder.dropout_keeprate: 1.0})
+                # summary_loss_test  = tb_summary_loss_test.eval( feed_dict={inputs: inputs_valid,
+                #                                                             true_heatmap: true_heatmap_valid,
+                #                                                             modelbuilder.dropout_keeprate: 1.0})
+                #
 
-                summary_loss_test  = tb_summary_loss_test.eval(feed_dict={dataset_handle: test_handle,
-                                                                          modelbuilder.dropout_keeprate: 1.0})
+                # summary_loss_train = tb_summary_loss_train.eval(feed_dict={dataset_handle: train_handle,
+                #                                                            modelbuilder.dropout_keeprate:1.0})
+                #
+                # summary_loss_test  = tb_summary_loss_test.eval(feed_dict={dataset_handle: test_handle,
+                #                                                           modelbuilder.dropout_keeprate: 1.0})
 
                 summary_lr         = tb_summary_lr.eval()
 
                 file_writer.add_summary(summary_loss_train,global_step_eval)
-                file_writer.add_summary(summary_loss_test,global_step_eval)
+                # file_writer.add_summary(summary_loss_test,global_step_eval)
                 file_writer.add_summary(summary_lr,global_step_eval)
 
                 print('At step = %d, train elapsed_time = %.1f ms' % (global_step_eval, train_elapsed_time))
-                print("Training set loss (avg over batch)= %.2f %%  " % (loss_train))
-                print("Test set Err loss (total batch)= %.2f %%" % (loss_test))
+                print("Training set loss (avg over batch)= %.2f   " % (loss_train))
+                # print("Test set Err loss (total batch)= %.2f %%" % (loss_test))
                 print("--------------------------------------------")
 
 
@@ -173,11 +195,15 @@ if __name__ == '__main__':
         transpose_input =False,
         use_bfloat16    =False) for is_training in [True, False]]
 
+
+
     dataset_train = dataloader_train.input_fn()
-    dataset_test  = dataloader_test.input_fn()
+    # dataset_test  = dataloader_test.input_fn()
+    dataset_test=None
 
     # model tranining
-    with tf.name_scope(name='trainer', values=[dataset_train, dataset_test]):
+    with tf.name_scope(name='trainer'):
         # < complete the train() function call >
         train(dataset_train=dataset_train,
               dataset_test=dataset_test)
+

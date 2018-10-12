@@ -152,6 +152,7 @@ class DataLoader(object):
         else:
             json_filename       = json_filename_split[-1] + '_valid.json'
 
+        tf.logging.info('json loading from %s' % json_filename)
         global TRAIN_ANNO
         TRAIN_ANNO      = COCO(join(DATASET_DIR,json_filename))
 
@@ -161,8 +162,11 @@ class DataLoader(object):
 
         if self.is_training:
             dataset.apply(tf.contrib.data.shuffle_and_repeat(buffer_size=train_config.train_data_size))
+            tf.logging.info('[Input_fn] Train dataset loading')
+
         else:
             dataset.repeat()
+            tf.logging.info('[Input_fn] Valid dataset loading')
 
 
         # # Read the data from disk in parallel
