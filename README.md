@@ -3,6 +3,15 @@ Readme for  Tiny pose estimation
 - Final update: 2018 Oct 
 - All right reserved @ Jaewook Kang 2018
 
+## Pycocotools (WIN)
+
+* MFC++
+- https://blog.naver.com/swkim4610/221335020498
+ 
+* Pycocotools
+pip install git+https://github.com/philferriere/cocoapi.git#subdirectory=PythonAPI
+related git: https://github.com/philferriere/cocoapi
+
 
 ## About
 The aim of this repository is to introduce an exemplary TF project in practice.
