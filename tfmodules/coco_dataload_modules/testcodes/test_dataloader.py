@@ -55,7 +55,6 @@ from train_config import TrainConfig
 from data_loader   import DataLoader
 from utils import metric_fn
 from utils import argmax_2d
-import tfplot
 
 
 
@@ -195,18 +194,22 @@ class DataLoaderTest(tf.test.TestCase):
                 ### heatmaps
                 plt.figure(3)
                 plt.imshow(labels_top_numpy.astype(np.uint8))
+                plt.title('TOP')
                 plt.show()
 
                 plt.figure(4)
                 plt.imshow(labels_neck_numpy.astype(np.uint8))
+                plt.title('NECK')
                 plt.show()
 
                 plt.figure(5)
                 plt.imshow(labels_rshoulder_numpy.astype(np.uint8))
+                plt.title('Rshoulder')
                 plt.show()
 
                 plt.figure(6)
                 plt.imshow(labels_lshoulder_numpy.astype(np.uint8))
+                plt.title('Lshoulder')
                 plt.show()
 
 if __name__ == '__main__':
