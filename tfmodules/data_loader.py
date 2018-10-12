@@ -174,16 +174,26 @@ class DataLoader(object):
         # multiprocessing_num === < the number of CPU cores >
         multiprocessing_num = 4
 
-        dataset = dataset.map(
-            lambda imgId: tuple(
-                tf.py_func(
-                    func=self._parse_function,
-                    inp=[imgId],
-                    Tout=[tf.float32, tf.float32]
-                )
-            ), num_parallel_calls=multiprocessing_num)
+        # dataset = dataset.map(
+        #     lambda imgId: tuple(
+        #         tf.py_func(
+        #             func=self._parse_function,
+        #             inp=[imgId],
+        #             Tout=[tf.float32, tf.float32]
+        #         )
+        #     ), num_parallel_calls=multiprocessing_num)
+        # dataset = dataset.batch(batch_size=train_config.batch_size)
 
-        dataset = dataset.batch(train_config.batch_size)
+        dataset = dataset.apply(tf.contrib.data.map_and_batch(
+                                    map_func=lambda imgId: tuple(
+                                    tf.py_func(
+                                        func=self._parse_function,
+                                        inp=[imgId],
+                                        Tout=[tf.float32, tf.float32])),
+                                    batch_size=train_config.batch_size,
+                                    num_parallel_batches=multiprocessing_num,  
+                                    drop_remainder=True))
+
         dataset = dataset.map(self._set_shapes, num_parallel_calls=multiprocessing_num)
 
 
