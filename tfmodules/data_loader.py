@@ -107,7 +107,7 @@ class DataLoader(object):
         if ann is not None:
             TRAIN_ANNO = ann
 
-        print('imgId = %s' % imgId)
+        # print('imgId = %s' % imgId)
         img_meta = TRAIN_ANNO.loadImgs([imgId])[0]
         anno_ids = TRAIN_ANNO.getAnnIds(imgIds=imgId)
         img_anno = TRAIN_ANNO.loadAnns(anno_ids)
@@ -116,11 +116,7 @@ class DataLoader(object):
         filename_item_list = img_meta['file_name'].split('/')
         filename = filename_item_list[1] +'/' + filename_item_list[2]
 
-        # for actual training   -----------------------
         img_path = join(DATASET_DIR, filename)
-
-        # for test_data_loader_coco.py  -----------------------
-        # img_path = join(self.data_dir, filename)
 
         img_meta_data   = CocoMetadata(idx=idx,
                                        img_path=img_path,
@@ -150,7 +146,6 @@ class DataLoader(object):
         """
         tf.logging.info('[Input_fn] is_training = %s' % self.is_training)
 
-        # for actual training   -----------------------
         json_filename_split = DATASET_DIR.split('/')
         if self.is_training:
             json_filename       = json_filename_split[-1] + '_train.json'
@@ -159,17 +154,6 @@ class DataLoader(object):
 
         global TRAIN_ANNO
         TRAIN_ANNO      = COCO(join(DATASET_DIR,json_filename))
-        #--------------------------------------------------------
-        # for test_data_loader_coco.py  -----------------------
-        # json_filename_split = self.data_dir.split('/')
-        # if self.is_training:
-        #     json_filename       = json_filename_split[-2] + '_train.json'
-        # else:
-        #     json_filename       = json_filename_split[-2] + '_valid.json'
-        #
-        # global TRAIN_ANNO
-        # TRAIN_ANNO      = COCO(join(self.data_dir,json_filename))
-        #--------------------------------------------------------
 
         imgIds          = TRAIN_ANNO.getImgIds()
         dataset         = tf.data.Dataset.from_tensor_slices(imgIds)

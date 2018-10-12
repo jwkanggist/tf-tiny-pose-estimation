@@ -20,7 +20,6 @@ import tensorflow as tf
 import numpy as np
 import time
 import sys
-import os
 
 
 from path_manager import TF_MODULE_DIR
@@ -51,6 +50,10 @@ def train(dataset_train, dataset_test):
     dataset_handle = tf.placeholder(tf.string, shape=[])
     dataset_train_iterator = dataset_train.make_one_shot_iterator()
     dataset_test_iterator  = dataset_test.make_one_shot_iterator()
+
+    # dataset_train_iterator = dataset_train.make_initializable_iterator()
+    # dataset_test_iterator  = dataset_test.make_initializable_iterator()
+
 
     dataset_iterator = tf.data.Iterator.from_string_handle(dataset_handle,
                                                            dataset_train.output_types,
@@ -104,6 +107,8 @@ def train(dataset_train, dataset_test):
     with tf.Session() as sess:
         # Run the variable initializer
         sess.run(init_var)
+        # sess.run(dataset_train_iterator.initializer)
+        # sess.run(dataset_test_iterator.initializer)
 
         train_handle    = sess.run(dataset_train_iterator.string_handle())
         test_handle     = sess.run(dataset_test_iterator.string_handle())
@@ -113,6 +118,7 @@ def train(dataset_train, dataset_test):
             train_start_time = time.time()
 
             # train model
+            tf.logging.info('[training sess]')
             _,loss_train = sess.run([train_op,loss_op],
                                      feed_dict={dataset_handle: train_handle,
                                      modelbuilder.dropout_keeprate:model_config.output.dropout_keeprate})
@@ -127,6 +133,7 @@ def train(dataset_train, dataset_test):
             elif global_step_eval % train_config.display_step == 0:
 
                 # test model
+                tf.logging.info('[test sess]')
                 loss_test = loss_op.eval(feed_dict={dataset_handle: test_handle,
                                                     modelbuilder.dropout_keeprate: 1.0})
 
