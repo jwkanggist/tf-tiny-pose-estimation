@@ -189,6 +189,8 @@ class ModelBuilder(object):
                                               model_config_separable_conv   =model_config_separable_conv,
                                               scope                         ='upsample_'+str(up_index))
 
+            net = tf.add(net,ch_in,name='out')
+
         return net
 
 

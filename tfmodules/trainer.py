@@ -63,7 +63,7 @@ def train(dataset_train, dataset_valid,train_config,model_config):
 
     # traning ops =============================================
     # < complete codes here >
-    loss_heatmap_op        = train_config.loss_fn(true_heatmap - pred_heatmap) / train_config.batch_size
+    loss_heatmap_op        = train_config.loss_fn( (true_heatmap - pred_heatmap)  / train_config.batch_size )
     loss_regularizer_op    = tf.losses.get_regularization_loss()
     loss_op                = loss_heatmap_op + loss_regularizer_op
 
