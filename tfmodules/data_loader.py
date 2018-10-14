@@ -43,9 +43,9 @@ from dataset_prepare import CocoMetadata
 
 sys.path.insert(0,DATASET_DIR)
 
-preproc_config = PreprocessingConfig()
-model_config   = ModelConfig()
 train_config   = TrainConfig()
+model_config   = ModelConfig()
+preproc_config = PreprocessingConfig()
 
 class DataLoader(object):
     """Generates DataSet input_fn for training or evaluation
