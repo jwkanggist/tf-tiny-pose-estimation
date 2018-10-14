@@ -39,7 +39,7 @@ COCO_DATALOAD_DIR       = TF_MODULE_DIR          + '/coco_dataload_modules'
 
 # data path
 # DATASET_DIR                 = PROJ_HOME     + '/dataset/ai_challenger'
-DATASET_DIR                  = '~/dataset/ai_challenger'
+DATASET_DIR                  = '/home/jwkangmacpro2/dataset/ai_challenger'
 
 COCO_TRAINSET_DIR            = DATASET_DIR     + '/train/'
 COCO_VALIDSET_DIR            = DATASET_DIR     + '/valid/'
