@@ -52,13 +52,13 @@ class TrainConfig(object):
         # tensorboard config
         now = datetime.utcnow().strftime("%Y%m%d%H%M%S")
 
-        self.root_logdir = EXPORT_DIR +'/'
+        self.root_logdir = EXPORT_DIR
 
         self.is_summary_heatmap = True
 
-        self.tflogdir       = "{}/run-{}/".format(self.root_logdir+'/tf_logs', now)
-        self.ckpt_dir       = self.tflogdir + '/pb_and_ckpt/'
-        self.setuplog_dir   = self.tflogdir + '/train_setup_log/'
+        self.tflogdir       = "{}/run-{}/".format(self.root_logdir+'tf_logs/', now)
+        self.ckpt_dir       = self.tflogdir + 'pb_and_ckpt/'
+        self.setuplog_dir   = self.tflogdir + 'train_setup_log/'
 
 
         self.train_config_dict = self.__dict__
