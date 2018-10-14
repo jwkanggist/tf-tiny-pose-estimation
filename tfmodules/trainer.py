@@ -43,8 +43,6 @@ from utils         import summary_fn
 
 def train(dataset_train, dataset_valid,train_config,model_config):
 
-
-
     dataset_handle = tf.placeholder(tf.string, shape=[])
     dataset_train_iterator  = dataset_train.make_one_shot_iterator()
     dataset_valid_iterator  = dataset_valid.make_one_shot_iterator()
@@ -119,6 +117,8 @@ def train(dataset_train, dataset_valid,train_config,model_config):
         train_handle     = sess.run(dataset_train_iterator.string_handle())
         valid_handle     = sess.run(dataset_valid_iterator.string_handle())
 
+        tf.logging.info('------------------------------------')
+        tf.logging.info('<<<< Training start! >>>>')
         for epoch in range(train_config.training_epochs):
 
             train_start_time = time.time()
@@ -155,7 +155,7 @@ def train(dataset_train, dataset_valid,train_config,model_config):
 
                 print('At step = %d, train elapsed_time = %.1f ms' % (global_step_eval, train_elapsed_time))
                 print("Training set loss (avg over batch)= %.2f   " % (loss_train))
-                print("valid set Err loss (total batch)= %.2f %%" % (loss_valid))
+                print("valid set Err loss (total batch)= %.2f " % (loss_valid))
                 print("--------------------------------------------")
 
             if global_step_eval % train_config.ckpt_step == 0:
@@ -175,6 +175,7 @@ if __name__ == '__main__':
     preproc_config  = PreprocessingConfig(setuplog_dir = train_config.setuplog_dir)
 
     train_config.send_setuplog_to_gcp_bucket()
+    preproc_config.show_info()
 
     # dataloader instance gen
     dataloader_train, dataloader_valid = \
@@ -193,7 +194,6 @@ if __name__ == '__main__':
 
     # model training
     with tf.name_scope(name='trainer'):
-        # < complete the train() function call >
         train(dataset_train=dataset_train,
               dataset_valid=dataset_valid,
               train_config=train_config,
