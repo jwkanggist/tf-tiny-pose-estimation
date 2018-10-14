@@ -189,7 +189,14 @@ class ModelBuilder(object):
                                               model_config_separable_conv   =model_config_separable_conv,
                                               scope                         ='upsample_'+str(up_index))
 
-            net = tf.add(net,ch_in,name='out')
+
+
+            # skip connection btw hourglass in and out
+            skip_connection = self.get_inverted_bottleneck(ch_in=ch_in,
+                                                           ch_out_num=ch_in_num,
+                                                           model_config=model_config_separable_conv,
+                                                           scope='inverted_bottleneck')
+            net = tf.add(net,skip_connection,name='out')
 
         return net
 
