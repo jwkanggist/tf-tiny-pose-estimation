@@ -40,7 +40,7 @@ class ModelConfig(object):
 
         self.input_chnum   = 3
         self.output_chnum  = 14 # number of keypoints
-        self.channel_num   = 32
+        self.channel_num   = 64
 
         self.dtype = tf.float32
 

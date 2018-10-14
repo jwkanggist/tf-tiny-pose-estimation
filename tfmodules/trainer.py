@@ -102,8 +102,7 @@ def train(dataset_train, dataset_valid,train_config,model_config):
 
     init_var = tf.global_variables_initializer()
     saver    = tf.train.Saver()
-    print('[train] training_epochs = %s' % train_config.training_epochs)
-    print('------------------------------------')
+
 
     sess_config = tf.ConfigProto(log_device_placement=True,
                                  gpu_options=tf.GPUOptions(allow_growth=True))
@@ -117,8 +116,10 @@ def train(dataset_train, dataset_valid,train_config,model_config):
         train_handle     = sess.run(dataset_train_iterator.string_handle())
         valid_handle     = sess.run(dataset_valid_iterator.string_handle())
 
-        tf.logging.info('------------------------------------')
+        tf.logging.info('====================================')
         tf.logging.info('<<<< Training start! >>>>')
+        tf.logging.info('[train] training_epochs = %s' % train_config.training_epochs)
+        tf.logging.info('------------------------------------')
         for epoch in range(train_config.training_epochs):
 
             train_start_time = time.time()

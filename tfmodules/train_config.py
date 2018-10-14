@@ -35,13 +35,13 @@ class TrainConfig(object):
         self.learning_rate_decay_rate   = 0.95
         self.opt_fn                 = tf.train.AdamOptimizer
         self.loss_fn                = tf.nn.l2_loss
-        self.batch_size             = 8
+        self.batch_size             = 64
         self.metric_fn              = tf.metrics.root_mean_squared_error
 
 
         # the number of step between evaluation
-        self.display_step   = 50
-        self.ckpt_step      = 50
+        self.display_step   = 100
+        self.ckpt_step      = 100
 
         self.train_data_size      = 22000
         self.test_data_size       = 1500
@@ -63,7 +63,7 @@ class TrainConfig(object):
 
         self.setuplog_dir   = "{}/run-{}/".format(self.local_logdir+'/train_setup_log',now)
 
-
+        print('[train_config] tflog    dir  = %s' % self.tflogdir)
         print('[train_config] setuplog dir = %s' % self.setuplog_dir)
         self.train_config_dict = self.__dict__
 
