@@ -21,6 +21,7 @@ from __future__ import print_function
 import tensorflow as tf
 from datetime import datetime
 from os import getcwd
+from path_manager import EXPORT_DIR
 import json
 
 class TrainConfig(object):
@@ -51,8 +52,7 @@ class TrainConfig(object):
         # tensorboard config
         now = datetime.utcnow().strftime("%Y%m%d%H%M%S")
 
-        # self.root_logdir = getcwd() + '/export/'
-        self.root_logdir   = 'gs://tf-tiny-pose-est'
+        self.root_logdir = EXPORT_DIR +'/'
 
         self.is_summary_heatmap = True
 
