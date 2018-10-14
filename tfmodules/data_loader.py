@@ -67,6 +67,7 @@ class DataLoader(object):
         self.is_training            = is_training
         self.use_bfloat16           = use_bfloat16
         self.data_dir               = data_dir
+        self.TRAIN_ANNO             = None
 
         if self.data_dir == 'null' or self.data_dir == '':
             self.data_dir = None
@@ -75,11 +76,6 @@ class DataLoader(object):
 
 
     def _set_shapes(self,img, heatmap):
-
-        # if self.is_training:
-        #     batch_size = train_config.batch_size
-        # else:
-        #     batch_size = 1
 
         batch_size = train_config.batch_size
 
@@ -102,15 +98,14 @@ class DataLoader(object):
         :param imgId:
         :return:
         """
-        global TRAIN_ANNO
 
         if ann is not None:
-            TRAIN_ANNO = ann
+            self.TRAIN_ANNO = ann
 
         # print('imgId = %s' % imgId)
-        img_meta = TRAIN_ANNO.loadImgs([imgId])[0]
-        anno_ids = TRAIN_ANNO.getAnnIds(imgIds=imgId)
-        img_anno = TRAIN_ANNO.loadAnns(anno_ids)
+        img_meta = self.TRAIN_ANNO.loadImgs([imgId])[0]
+        anno_ids = self.TRAIN_ANNO.getAnnIds(imgIds=imgId)
+        img_anno = self.TRAIN_ANNO.loadAnns(anno_ids)
         idx = img_meta['id']
 
         filename_item_list = img_meta['file_name'].split('/')
@@ -153,10 +148,9 @@ class DataLoader(object):
             json_filename       = json_filename_split[-1] + '_valid.json'
 
         tf.logging.info('json loading from %s' % json_filename)
-        global TRAIN_ANNO
-        TRAIN_ANNO      = COCO(join(DATASET_DIR,json_filename))
+        self.TRAIN_ANNO      = COCO(join(DATASET_DIR,json_filename))
 
-        imgIds          = TRAIN_ANNO.getImgIds()
+        imgIds          = self.TRAIN_ANNO.getImgIds()
         dataset         = tf.data.Dataset.from_tensor_slices(imgIds)
 
 
@@ -172,7 +166,6 @@ class DataLoader(object):
         # # Read the data from disk in parallel
         # where cycle_length is the Number of training files to read in parallel.
         # multiprocessing_num === < the number of CPU cores >
-        multiprocessing_num = 4
 
         # dataset = dataset.map(
         #     lambda imgId: tuple(
@@ -191,10 +184,10 @@ class DataLoader(object):
                                         inp=[imgId],
                                         Tout=[tf.float32, tf.float32])),
                                     batch_size=train_config.batch_size,
-                                    num_parallel_batches=multiprocessing_num,  
+                                    num_parallel_batches=train_config.multiprocessing_num,
                                     drop_remainder=True))
 
-        dataset = dataset.map(self._set_shapes, num_parallel_calls=multiprocessing_num)
+        dataset = dataset.map(self._set_shapes, num_parallel_calls=train_config.multiprocessing_num)
 
 
 
