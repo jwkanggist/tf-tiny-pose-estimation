@@ -33,20 +33,16 @@ sys.path.insert(0,COCO_DATALOAD_DIR)
 
 
 from model_config import ModelConfig
-
-from train_config import TrainConfig
 from train_config import PreprocessingConfig
+from train_config import TrainConfig
 
 from model_builder import ModelBuilder
 from data_loader   import DataLoader
 from utils         import summary_fn
 
 
-def train(dataset_train, dataset_valid):
-    model_config    = ModelConfig()
+def train(dataset_train, dataset_valid,train_config,model_config):
 
-    train_config    = TrainConfig()
-    preproc_config  = PreprocessingConfig()
 
 
     dataset_handle = tf.placeholder(tf.string, shape=[])
@@ -100,7 +96,9 @@ def train(dataset_train, dataset_valid):
                           learning_rate     = lr_op,
                           input_images      = inputs,
                           label_heatmap     = true_heatmap,
-                          pred_out_heatmap  = pred_heatmap)
+                          pred_out_heatmap  = pred_heatmap,
+                          train_config      = train_config,
+                          model_config      = model_config)
 
     # training ==============================
 
@@ -172,7 +170,11 @@ def train(dataset_train, dataset_valid):
 
 if __name__ == '__main__':
     tf.logging.set_verbosity(tf.logging.INFO)
+    train_config    = TrainConfig()
+    model_config    = ModelConfig(setuplog_dir = train_config.setuplog_dir)
+    preproc_config  = PreprocessingConfig(setuplog_dir = train_config.setuplog_dir)
 
+    train_config.send_setuplog_to_gcp_bucket()
 
     # dataloader instance gen
     dataloader_train, dataloader_valid = \
@@ -180,6 +182,9 @@ if __name__ == '__main__':
         is_training     =is_training,
         data_dir        =DATASET_DIR,
         transpose_input =False,
+        train_config    = train_config,
+        model_config    = model_config,
+        preproc_config  = preproc_config,
         use_bfloat16    =False) for is_training in [True, False]]
 
 
@@ -190,5 +195,7 @@ if __name__ == '__main__':
     with tf.name_scope(name='trainer'):
         # < complete the train() function call >
         train(dataset_train=dataset_train,
-              dataset_valid=dataset_valid)
+              dataset_valid=dataset_valid,
+              train_config=train_config,
+              model_config=model_config)
 
