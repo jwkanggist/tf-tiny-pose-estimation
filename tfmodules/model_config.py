@@ -51,9 +51,6 @@ class ModelConfig(object):
         self.output_config_dict     = self.output.__dict__
 
         train_config = TrainConfig()
-        if not tf.gfile.Exists(train_config.setuplog_dir):
-            tf.gfile.MakeDirs(train_config.setuplog_dir)
-
         model_config_filename       = train_config.setuplog_dir + 'model_config.json'
         reception_config_filename   = train_config.setuplog_dir + 'recept_config.json'
         hourglass_config_filename   = train_config.setuplog_dir + 'hourglass_config.json'

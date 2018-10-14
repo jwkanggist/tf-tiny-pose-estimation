@@ -60,7 +60,7 @@ class TrainConfig(object):
         self.ckpt_dir       = self.tflogdir + 'pb_and_ckpt/'
         self.setuplog_dir   = self.tflogdir + 'train_setup_log/'
 
-
+        print('[train_config] setuplog dir = %s' % self.setuplog_dir)
         self.train_config_dict = self.__dict__
 
         if not tf.gfile.Exists(self.setuplog_dir):
