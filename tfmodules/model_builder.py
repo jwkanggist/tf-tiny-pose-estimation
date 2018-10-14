@@ -161,7 +161,15 @@ class ModelBuilder(object):
             # add skip connection
             net = center
             for up_index in range(0,model_config.num_stage):
-                net = tf.add(x=net, y=downsample_out_stack.pop())
+
+                skip_connection = downsample_out_stack.pop()
+
+                with tf.variable_scope(name_or_scope='skip_connect'+str(up_index),values=[skip_connection]):
+                    skip_connection = self._get_separable_conv2d(ch_in      =skip_connection,
+                                                                 ch_out_num =ch_in_num,
+                                                                 model_config=model_config_separable_conv,
+                                                                 scope       ='separable_conv')
+                net = tf.add(x=net, y=skip_connection)
 
                 net = self.upsample_hourglass(ch_in                         =net,
                                               model_config                  =model_config,

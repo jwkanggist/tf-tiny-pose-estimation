@@ -21,7 +21,7 @@ from __future__ import print_function
 import tensorflow as tf
 from datetime import datetime
 from os import getcwd
-
+import json
 
 class TrainConfig(object):
 
@@ -39,24 +39,37 @@ class TrainConfig(object):
 
         # the number of step between evaluation
         self.display_step   = 50
+        self.ckpt_step      = 50
+
         self.train_data_size      = 22000
         self.test_data_size       = 1500
 
         self.training_epochs = int(float(self.train_data_size/self.batch_size) * 10.0)
-
-
-        self.multiprocessing_num = 1
+        self.multiprocessing_num = 4
         self.random_seed         = 66478
 
         # tensorboard config
         now = datetime.utcnow().strftime("%Y%m%d%H%M%S")
-        self.root_logdir = getcwd() + '/export/'
 
-        self.ckptdir  = self.root_logdir + '/pb_and_ckpt/'
-        self.tflogdir = "{}/run-{}/".format(self.root_logdir+'/tf_logs', now)
+        # self.root_logdir = getcwd() + '/export/'
+        self.root_logdir   = 'gs://tf-tiny-pose-est'
+
+        self.is_summary_heatmap = True
+
+        self.tflogdir       = "{}/run-{}/".format(self.root_logdir+'/tf_logs', now)
+        self.ckpt_dir       = self.tflogdir + '/pb_and_ckpt/'
+        self.setuplog_dir   = self.tflogdir + '/train_setup_log/'
 
 
+        self.train_config_dict = self.__dict__
 
+        if not tf.gfile.Exists(self.setuplog_dir):
+            tf.gfile.MakeDirs(self.setuplog_dir)
+
+        train_config_filename = self.setuplog_dir + 'train_config.json'
+
+        with open(train_config_filename,'w') as fp:
+            json.dump(str(self.train_config_dict),fp)
 
 
 class PreprocessingConfig(object):

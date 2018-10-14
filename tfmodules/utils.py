@@ -149,26 +149,24 @@ def metric_fn(labels, logits,pck_threshold):
 
 def summary_fn(loss,
                total_out_losssum,
-               total_mid_losssum_list,
                learning_rate,
                input_images,
                label_heatmap,
-               pred_out_heatmap,
-               pred_mid_heatmap):
+               pred_out_heatmap):
     '''
 
         code ref: https://github.com/wookayin/tensorflow-plot
     '''
 
-    tf.summary.scalar(name='loss', tensor=loss, family='outlayer')
-    tf.summary.scalar(name='out_loss', tensor=total_out_losssum, family='outlayer')
-    tf.summary.scalar(name='learning_rate', tensor=learning_rate, family='outlayer')
+    tf.summary.scalar(name='loss', tensor=loss)
+    tf.summary.scalar(name='out_loss', tensor=total_out_losssum)
+    tf.summary.scalar(name='learning_rate', tensor=learning_rate)
 
 
     batch_size          = train_config.batch_size
     resized_input_image = tf.image.resize_bicubic(images= input_images,
-                                                  size=[int(DEFAULT_HG_INOUT_RESOL),
-                                                        int(DEFAULT_HG_INOUT_RESOL)],
+                                                  size=[model_config._output_size,
+                                                        model_config._output_size],
                                                   align_corners=False)
     tf.logging.info ('[summary_fn] batch_size = %s' % batch_size)
     tf.logging.info ('[summary_fn] resized_input_image.shape= %s' % resized_input_image.get_shape().as_list())
@@ -179,9 +177,8 @@ def summary_fn(loss,
     if train_config.is_summary_heatmap:
         summary_name_true_heatmap           = "true_heatmap_summary"
         summary_name_pred_out_heatmap       = "pred_out_heatmap_summary"
-        summary_name_pred_mid_heatmap       = "pred_mid_heatmap_summary"
 
-        for keypoint_index in range(0,train_config.output_chnum):
+        for keypoint_index in range(0,model_config.output_chnum):
             tfplot.summary.plot_many(name           =summary_name_true_heatmap + '_' +
                                                      str(keypoint_index),
                                      plot_func      =overlay_attention_batch,
@@ -196,22 +193,6 @@ def summary_fn(loss,
                                                       resized_input_image],
                                      max_outputs    =batch_size)
 
-
-        for n in range(0, model_config.num_of_hgstacking - 1):
-            tf.logging.info ('[summary_fn] pred_mid_heatmap.shape= %s' % pred_mid_heatmap[0].get_shape().as_list())
-
-            tf.summary.scalar(name='mid_loss' + str(n),
-                              tensor=total_mid_losssum_list[n],
-                              family='midlayer')
-
-            for keypoint_index in range(0,train_config.output_chnum):
-                tfplot.summary.plot_many(name       =summary_name_pred_mid_heatmap + '_' +
-                                                     str(keypoint_index) +
-                                                     '_hgstage'+str(n),
-                                         plot_func  =overlay_attention_batch,
-                                         in_tensors =[pred_mid_heatmap[n][:, :, :, keypoint_index],
-                                                      resized_input_image],
-                                         max_outputs=batch_size)
 
     return tf.summary.merge_all()
 

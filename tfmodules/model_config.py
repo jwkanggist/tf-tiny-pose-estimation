@@ -20,6 +20,10 @@ from __future__ import print_function
 
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
+from train_config import TrainConfig
+import json
+
+
 
 
 class ModelConfig(object):
@@ -40,6 +44,32 @@ class ModelConfig(object):
 
         self.dtype = tf.float32
 
+        # model config logging
+        self.model_config_dict      = self.__dict__
+        self.reception_config_dict  = self.reception.__dict__
+        self.hourglass_config_dict  = self.hourglass.__dict__
+        self.output_config_dict     = self.output.__dict__
+
+        train_config = TrainConfig()
+        if not tf.gfile.Exists(train_config.setuplog_dir):
+            tf.gfile.MakeDirs(train_config.setuplog_dir)
+
+        model_config_filename       = train_config.setuplog_dir + 'model_config.json'
+        reception_config_filename   = train_config.setuplog_dir + 'recept_config.json'
+        hourglass_config_filename   = train_config.setuplog_dir + 'hourglass_config.json'
+        output_config_filename      = train_config.setuplog_dir + 'output_config.json'
+
+        with open(model_config_filename,'w') as fp:
+            json.dump(str(self.model_config_dict), fp)
+
+        with open(reception_config_filename,'w') as fp:
+            json.dump(str(self.reception_config_dict),fp)
+
+        with open(hourglass_config_filename,'w') as fp:
+            json.dump(str(self.hourglass_config_dict),fp)
+
+        with open(output_config_filename,'w') as fp:
+            json.dump(str(self.output_config_dict),fp)
 
 
 
@@ -47,8 +77,6 @@ class ModelConfig(object):
 class RecepConfig(object):
 
     def __init__(self):
-
-
         # batch norm config
         self.batch_norm_decay   =  0.999
         self.batch_norm_fused   =  True
@@ -72,10 +100,10 @@ class RecepConfig(object):
 
 
 
+
 class HourglassConfig(object):
 
     def __init__(self):
-
         self.updown_rate            = 2
         self.maxpool_kernel_size    =[3,3]
         self.num_stage              = 3
@@ -83,10 +111,10 @@ class HourglassConfig(object):
 
 
 
+
 class OutputConfig(object):
 
     def __init__(self):
-
         self.dropout_keeprate       = 0.8
         self.weights_initializer    = tf.contrib.layers.xavier_initializer()
         self.weights_regularizer    = tf.contrib.layers.l2_regularizer(4E-5)
@@ -104,7 +132,6 @@ class OutputConfig(object):
 class SeparableConfig(object):
 
     def __init__(self):
-
         # batch norm config
         self.batch_norm_decay   =  0.999
         self.batch_norm_fused   =  True
