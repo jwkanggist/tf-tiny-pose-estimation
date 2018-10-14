@@ -55,7 +55,7 @@ class TrainConfig(object):
 
         self.is_summary_heatmap = True
 
-        self.tflogdir       = "{}/run-{}/".format(self.root_logdir+'/tf_logs/', now)
+        self.tflogdir       = "{}/run-{}/".format(self.root_logdir+'/tf_logs', now)
         self.ckpt_dir       = self.tflogdir + 'pb_and_ckpt/'
         self.setuplog_dir   = self.tflogdir + 'train_setup_log/'
 
