@@ -155,8 +155,16 @@ class DataLoader(object):
 
 
         if self.is_training:
-            dataset.apply(tf.contrib.data.shuffle_and_repeat(buffer_size=self.train_config.train_data_size,
-                                                             count=None))
+
+            # dataset.apply(tf.contrib.data.shuffle_and_repeat(buffer_size=self.train_config.train_data_size,
+            #                                                  count=None))
+            # dataset elementwise shuffling
+
+            dataset = dataset.shuffle(buffer_size=self.train_config.train_data_size)
+            tf.logging.info('[Input_fn] dataset.shuffle()')
+            dataset = dataset.repeat(count=None)
+            tf.logging.info('[Input_fn] dataset.repeat()')
+
             tf.logging.info('[Input_fn] Train dataset loading')
 
         else:
@@ -186,7 +194,7 @@ class DataLoader(object):
                                         inp=[imgId],
                                         Tout=[tf.float32, tf.float32])),
                                     batch_size=self.train_config.batch_size,
-                                    num_parallel_batches=self.train_config.multiprocessing_num,
+                                    num_parallel_calls=self.train_config.multiprocessing_num,
                                     drop_remainder=True))
 
         dataset = dataset.map(self._set_shapes, num_parallel_calls=self.train_config.multiprocessing_num)

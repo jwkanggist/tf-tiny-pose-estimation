@@ -47,7 +47,6 @@ def train(dataset_train, dataset_valid,train_config,model_config):
     dataset_train_iterator  = dataset_train.make_one_shot_iterator()
     dataset_valid_iterator  = dataset_valid.make_one_shot_iterator()
 
-
     dataset_handle = tf.placeholder(tf.string, shape=[])
     dataset_iterator = tf.data.Iterator.from_string_handle(dataset_handle,
                                                            dataset_train.output_types,
@@ -97,10 +96,8 @@ def train(dataset_train, dataset_valid,train_config,model_config):
                           model_config      = model_config)
 
     # training ==============================
-
     init_var = tf.global_variables_initializer()
     saver    = tf.train.Saver()
-
 
     sess_config = tf.ConfigProto(log_device_placement=True,
                                  gpu_options=tf.GPUOptions(allow_growth=True))
