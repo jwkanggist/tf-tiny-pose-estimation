@@ -24,14 +24,6 @@ import numpy as np
 import tfplot
 import tfplot.summary
 
-from train_config  import TrainConfig
-from model_config  import ModelConfig
-
-# config instance generation
-train_config    = TrainConfig()
-model_config    = ModelConfig()
-
-
 
 def argmax_2d(tensor):
 
@@ -54,96 +46,96 @@ def argmax_2d(tensor):
     return tf.concat((argmax_x, argmax_y), axis=1)
 
 
-
-
-def metric_fn(labels, logits,pck_threshold):
-    """Evaluation metric function. Evaluates accuracy.
-
-    This function is executed on the CPU and should not directly reference
-    any Tensors in the rest of the `model_fn`. To pass Tensors from the model
-    to the `metric_fn`, provide as part of the `eval_metrics`. See
-    https://www.tensorflow.org/api_docs/python/tf/contrib/tpu/TPUEstimatorSpec
-    for more information.
-
-    Arguments should match the list of `Tensor` objects passed as the second
-    element in the tuple passed to `eval_metrics`.
-
-    Args:
-    labels: `Tensor` of labels_heatmap_list
-    logits: `Tensor` of logits_heatmap_list
-
-    Returns:
-    A dict of the metrics to return from evaluation.
-    """
-
-    with tf.name_scope('metric_fn',values=[labels, logits,pck_threshold]):
-
-        # get predicted coordinate
-        pred_head_xy       = argmax_2d(logits[:,:,:,0:1])
-        pred_neck_xy       = argmax_2d(logits[:,:,:,1:2])
-        pred_rshoulder_xy  = argmax_2d(logits[:,:,:,2:3])
-        pred_lshoulder_xy  = argmax_2d(logits[:,:,:,3:4])
-
-        label_head_xy      = argmax_2d(labels[:,:,:,0:1])
-        label_neck_xy      = argmax_2d(labels[:,:,:,1:2])
-        label_rshoulder_xy = argmax_2d(labels[:,:,:,2:3])
-        label_lshoulder_xy = argmax_2d(labels[:,:,:,3:4])
-
-
-        # error distance measure
-        metric_err_fn                 = train_config.metric_fn
-
-        # distance == root mean square
-        head_neck_dist, update_op_head_neck_dist     = metric_err_fn(labels=label_head_xy,
-                                                      predictions=label_neck_xy)
-
-        errdist_head,update_op_errdist_head             = metric_err_fn(labels=label_head_xy,
-                                                                        predictions=pred_head_xy)
-        errdist_neck,update_op_errdist_neck             = metric_err_fn(labels=label_neck_xy,
-                                                                        predictions= pred_neck_xy)
-        errdist_rshoulder, update_op_errdist_rshoulder  = metric_err_fn(labels=label_rshoulder_xy,
-                                                                        predictions= pred_rshoulder_xy)
-        errdist_lshoulder, update_op_errdist_lshoulder  = metric_err_fn(labels=label_lshoulder_xy,
-                                                                        predictions= pred_lshoulder_xy)
-        # percentage of correct keypoints
-        total_errdist = (errdist_head +
-                         errdist_neck +
-                         errdist_rshoulder +
-                         errdist_lshoulder) / head_neck_dist
-
-        update_op_total_errdist = (update_op_errdist_head +
-                                   update_op_errdist_neck +
-                                   update_op_errdist_rshoulder +
-                                   update_op_errdist_lshoulder) / update_op_head_neck_dist
-
-        pck =            tf.metrics.percentage_below(values=total_errdist,
-                                                   threshold=pck_threshold,
-                                                   name=    'pck_' + str(pck_threshold))
-
-
-        # form a dictionary
-        metric_dict = {
-                            'label_head_neck_dist' : (head_neck_dist/head_neck_dist,
-                                                      update_op_head_neck_dist/update_op_head_neck_dist),
-
-                            'total_errdis': (total_errdist,update_op_total_errdist),
-
-                            'errdist_head': (errdist_head/head_neck_dist,
-                                             update_op_errdist_head/update_op_head_neck_dist),
-
-                            'errdist_neck': (errdist_neck/head_neck_dist,
-                                             update_op_errdist_neck/update_op_head_neck_dist),
-
-                            'errdist_rshou': (errdist_rshoulder/head_neck_dist,
-                                                    update_op_errdist_rshoulder /update_op_head_neck_dist),
-
-                            'errdist_lshou': (errdist_lshoulder/head_neck_dist,
-                                                    update_op_errdist_lshoulder /update_op_head_neck_dist),
-                            'pck': pck
-                        }
-
-    return metric_dict
-
+#
+#
+# def metric_fn(labels, logits,pck_threshold):
+#     """Evaluation metric function. Evaluates accuracy.
+#
+#     This function is executed on the CPU and should not directly reference
+#     any Tensors in the rest of the `model_fn`. To pass Tensors from the model
+#     to the `metric_fn`, provide as part of the `eval_metrics`. See
+#     https://www.tensorflow.org/api_docs/python/tf/contrib/tpu/TPUEstimatorSpec
+#     for more information.
+#
+#     Arguments should match the list of `Tensor` objects passed as the second
+#     element in the tuple passed to `eval_metrics`.
+#
+#     Args:
+#     labels: `Tensor` of labels_heatmap_list
+#     logits: `Tensor` of logits_heatmap_list
+#
+#     Returns:
+#     A dict of the metrics to return from evaluation.
+#     """
+#
+#     with tf.name_scope('metric_fn',values=[labels, logits,pck_threshold]):
+#
+#         # get predicted coordinate
+#         pred_head_xy       = argmax_2d(logits[:,:,:,0:1])
+#         pred_neck_xy       = argmax_2d(logits[:,:,:,1:2])
+#         pred_rshoulder_xy  = argmax_2d(logits[:,:,:,2:3])
+#         pred_lshoulder_xy  = argmax_2d(logits[:,:,:,3:4])
+#
+#         label_head_xy      = argmax_2d(labels[:,:,:,0:1])
+#         label_neck_xy      = argmax_2d(labels[:,:,:,1:2])
+#         label_rshoulder_xy = argmax_2d(labels[:,:,:,2:3])
+#         label_lshoulder_xy = argmax_2d(labels[:,:,:,3:4])
+#
+#
+#         # error distance measure
+#         metric_err_fn                 = train_config.metric_fn
+#
+#         # distance == root mean square
+#         head_neck_dist, update_op_head_neck_dist     = metric_err_fn(labels=label_head_xy,
+#                                                       predictions=label_neck_xy)
+#
+#         errdist_head,update_op_errdist_head             = metric_err_fn(labels=label_head_xy,
+#                                                                         predictions=pred_head_xy)
+#         errdist_neck,update_op_errdist_neck             = metric_err_fn(labels=label_neck_xy,
+#                                                                         predictions= pred_neck_xy)
+#         errdist_rshoulder, update_op_errdist_rshoulder  = metric_err_fn(labels=label_rshoulder_xy,
+#                                                                         predictions= pred_rshoulder_xy)
+#         errdist_lshoulder, update_op_errdist_lshoulder  = metric_err_fn(labels=label_lshoulder_xy,
+#                                                                         predictions= pred_lshoulder_xy)
+#         # percentage of correct keypoints
+#         total_errdist = (errdist_head +
+#                          errdist_neck +
+#                          errdist_rshoulder +
+#                          errdist_lshoulder) / head_neck_dist
+#
+#         update_op_total_errdist = (update_op_errdist_head +
+#                                    update_op_errdist_neck +
+#                                    update_op_errdist_rshoulder +
+#                                    update_op_errdist_lshoulder) / update_op_head_neck_dist
+#
+#         pck =            tf.metrics.percentage_below(values=total_errdist,
+#                                                    threshold=pck_threshold,
+#                                                    name=    'pck_' + str(pck_threshold))
+#
+#
+#         # form a dictionary
+#         metric_dict = {
+#                             'label_head_neck_dist' : (head_neck_dist/head_neck_dist,
+#                                                       update_op_head_neck_dist/update_op_head_neck_dist),
+#
+#                             'total_errdis': (total_errdist,update_op_total_errdist),
+#
+#                             'errdist_head': (errdist_head/head_neck_dist,
+#                                              update_op_errdist_head/update_op_head_neck_dist),
+#
+#                             'errdist_neck': (errdist_neck/head_neck_dist,
+#                                              update_op_errdist_neck/update_op_head_neck_dist),
+#
+#                             'errdist_rshou': (errdist_rshoulder/head_neck_dist,
+#                                                     update_op_errdist_rshoulder /update_op_head_neck_dist),
+#
+#                             'errdist_lshou': (errdist_lshoulder/head_neck_dist,
+#                                                     update_op_errdist_lshoulder /update_op_head_neck_dist),
+#                             'pck': pck
+#                         }
+#
+#     return metric_dict
+#
 
 
 
@@ -152,7 +144,9 @@ def summary_fn(loss,
                learning_rate,
                input_images,
                label_heatmap,
-               pred_out_heatmap):
+               pred_out_heatmap,
+               train_config,
+               model_config):
     '''
 
         code ref: https://github.com/wookayin/tensorflow-plot

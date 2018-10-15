@@ -31,11 +31,6 @@ from path_manager import DATASET_DIR
 from pycocotools.coco import COCO
 
 
-from train_config  import PreprocessingConfig
-from train_config  import TrainConfig
-from model_config  import ModelConfig
-
-
 # for coco dataset
 import dataset_augment
 from dataset_prepare import CocoMetadata
@@ -43,9 +38,6 @@ from dataset_prepare import CocoMetadata
 
 sys.path.insert(0,DATASET_DIR)
 
-preproc_config = PreprocessingConfig()
-model_config   = ModelConfig()
-train_config   = TrainConfig()
 
 class DataLoader(object):
     """Generates DataSet input_fn for training or evaluation
@@ -61,6 +53,9 @@ class DataLoader(object):
     def __init__(self, is_training,
                  data_dir,
                  use_bfloat16,
+                 train_config,
+                 model_config,
+                 preproc_config,
                  transpose_input=True):
 
         self.image_preprocessing_fn = dataset_augment.preprocess_image
@@ -68,6 +63,9 @@ class DataLoader(object):
         self.use_bfloat16           = use_bfloat16
         self.data_dir               = data_dir
         self.TRAIN_ANNO             = None
+        self.train_config           = train_config
+        self.model_config           = model_config
+        self.preproc_config         = preproc_config
 
         if self.data_dir == 'null' or self.data_dir == '':
             self.data_dir = None
@@ -77,17 +75,17 @@ class DataLoader(object):
 
     def _set_shapes(self,img, heatmap):
 
-        batch_size = train_config.batch_size
+        batch_size = self.train_config.batch_size
 
         img.set_shape([batch_size,
-                       model_config._input_size,
-                       model_config._input_size,
-                       model_config.input_chnum])
+                       self.model_config._input_size,
+                       self.model_config._input_size,
+                       self.model_config.input_chnum])
 
         heatmap.set_shape([batch_size,
-                           model_config._output_size,
-                           model_config._output_size,
-                           model_config.output_chnum])
+                           self.model_config._output_size,
+                           self.model_config._output_size,
+                           self.model_config.output_chnum])
         return img, heatmap
 
 
@@ -117,11 +115,11 @@ class DataLoader(object):
                                        img_path=img_path,
                                        img_meta=img_meta,
                                        annotations=img_anno,
-                                       sigma=preproc_config.heatmap_std)
+                                       sigma=self.preproc_config.heatmap_std)
 
         # print('joint_list = %s' % img_meta_data.joint_list)
         images, labels  = self.image_preprocessing_fn(img_meta_data=img_meta_data,
-                                                      preproc_config=preproc_config)
+                                                      preproc_config=self.preproc_config)
         return images, labels
 
 
@@ -155,7 +153,7 @@ class DataLoader(object):
 
 
         if self.is_training:
-            dataset.apply(tf.contrib.data.shuffle_and_repeat(buffer_size=train_config.train_data_size))
+            dataset.apply(tf.contrib.data.shuffle_and_repeat(buffer_size=self.train_config.train_data_size))
             tf.logging.info('[Input_fn] Train dataset loading')
 
         else:
@@ -175,7 +173,7 @@ class DataLoader(object):
         #             Tout=[tf.float32, tf.float32]
         #         )
         #     ), num_parallel_calls=multiprocessing_num)
-        # dataset = dataset.batch(batch_size=train_config.batch_size)
+        # dataset = dataset.batch(batch_size=self.train_config.batch_size)
 
         dataset = dataset.apply(tf.contrib.data.map_and_batch(
                                     map_func=lambda imgId: tuple(
@@ -183,11 +181,11 @@ class DataLoader(object):
                                         func=self._parse_function,
                                         inp=[imgId],
                                         Tout=[tf.float32, tf.float32])),
-                                    batch_size=train_config.batch_size,
-                                    num_parallel_batches=train_config.multiprocessing_num,
+                                    batch_size=self.train_config.batch_size,
+                                    num_parallel_batches=self.train_config.multiprocessing_num,
                                     drop_remainder=True))
 
-        dataset = dataset.map(self._set_shapes, num_parallel_calls=train_config.multiprocessing_num)
+        dataset = dataset.map(self._set_shapes, num_parallel_calls=self.train_config.multiprocessing_num)
 
 
 

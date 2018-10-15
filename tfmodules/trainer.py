@@ -33,21 +33,15 @@ sys.path.insert(0,COCO_DATALOAD_DIR)
 
 
 from model_config import ModelConfig
-
-from train_config import TrainConfig
 from train_config import PreprocessingConfig
+from train_config import TrainConfig
 
 from model_builder import ModelBuilder
 from data_loader   import DataLoader
 from utils         import summary_fn
 
 
-def train(dataset_train, dataset_valid):
-    model_config    = ModelConfig()
-
-    train_config    = TrainConfig()
-    preproc_config  = PreprocessingConfig()
-
+def train(dataset_train, dataset_valid,train_config,model_config):
 
     dataset_handle = tf.placeholder(tf.string, shape=[])
     dataset_train_iterator  = dataset_train.make_one_shot_iterator()
@@ -69,7 +63,7 @@ def train(dataset_train, dataset_valid):
 
     # traning ops =============================================
     # < complete codes here >
-    loss_heatmap_op        = train_config.loss_fn(true_heatmap - pred_heatmap) / train_config.batch_size
+    loss_heatmap_op        = train_config.loss_fn( (true_heatmap - pred_heatmap)  / train_config.batch_size )
     loss_regularizer_op    = tf.losses.get_regularization_loss()
     loss_op                = loss_heatmap_op + loss_regularizer_op
 
@@ -100,14 +94,15 @@ def train(dataset_train, dataset_valid):
                           learning_rate     = lr_op,
                           input_images      = inputs,
                           label_heatmap     = true_heatmap,
-                          pred_out_heatmap  = pred_heatmap)
+                          pred_out_heatmap  = pred_heatmap,
+                          train_config      = train_config,
+                          model_config      = model_config)
 
     # training ==============================
 
     init_var = tf.global_variables_initializer()
     saver    = tf.train.Saver()
-    print('[train] training_epochs = %s' % train_config.training_epochs)
-    print('------------------------------------')
+
 
     sess_config = tf.ConfigProto(log_device_placement=True,
                                  gpu_options=tf.GPUOptions(allow_growth=True))
@@ -121,6 +116,10 @@ def train(dataset_train, dataset_valid):
         train_handle     = sess.run(dataset_train_iterator.string_handle())
         valid_handle     = sess.run(dataset_valid_iterator.string_handle())
 
+        tf.logging.info('====================================')
+        tf.logging.info('<<<< Training start! >>>>')
+        tf.logging.info('[train] training_epochs = %s' % train_config.training_epochs)
+        tf.logging.info('------------------------------------')
         for epoch in range(train_config.training_epochs):
 
             train_start_time = time.time()
@@ -157,7 +156,7 @@ def train(dataset_train, dataset_valid):
 
                 print('At step = %d, train elapsed_time = %.1f ms' % (global_step_eval, train_elapsed_time))
                 print("Training set loss (avg over batch)= %.2f   " % (loss_train))
-                print("valid set Err loss (total batch)= %.2f %%" % (loss_valid))
+                print("valid set Err loss (total batch)= %.2f " % (loss_valid))
                 print("--------------------------------------------")
 
             if global_step_eval % train_config.ckpt_step == 0:
@@ -172,7 +171,12 @@ def train(dataset_train, dataset_valid):
 
 if __name__ == '__main__':
     tf.logging.set_verbosity(tf.logging.INFO)
+    train_config    = TrainConfig()
+    model_config    = ModelConfig(setuplog_dir = train_config.setuplog_dir)
+    preproc_config  = PreprocessingConfig(setuplog_dir = train_config.setuplog_dir)
 
+    train_config.send_setuplog_to_gcp_bucket()
+    preproc_config.show_info()
 
     # dataloader instance gen
     dataloader_train, dataloader_valid = \
@@ -180,6 +184,9 @@ if __name__ == '__main__':
         is_training     =is_training,
         data_dir        =DATASET_DIR,
         transpose_input =False,
+        train_config    = train_config,
+        model_config    = model_config,
+        preproc_config  = preproc_config,
         use_bfloat16    =False) for is_training in [True, False]]
 
 
@@ -188,7 +195,8 @@ if __name__ == '__main__':
 
     # model training
     with tf.name_scope(name='trainer'):
-        # < complete the train() function call >
         train(dataset_train=dataset_train,
-              dataset_valid=dataset_valid)
+              dataset_valid=dataset_valid,
+              train_config=train_config,
+              model_config=model_config)
 

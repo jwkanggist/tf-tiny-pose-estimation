@@ -31,6 +31,7 @@ class ModelBuilder(object):
 
 
 
+
     def get_model(self, model_in,scope):
 
         with tf.variable_scope(name_or_scope=scope, values=[model_in]):
@@ -85,11 +86,14 @@ class ModelBuilder(object):
                                     activation_fn=model_config.activation_fn,
                                     scope='batch_norm_7x7conv')
 
-            net = self._get_separable_conv2d(ch_in          =net,
+            # net = self._get_separable_conv2d(ch_in          =net,
+            #                                 ch_out_num      =num_outputs,
+            #                                 model_config    =model_config_separable_conv,
+            #                                 scope='separable_conv')
+            net = self.get_inverted_bottleneck(ch_in          =net,
                                             ch_out_num      =num_outputs,
                                             model_config    =model_config_separable_conv,
-                                            scope='separable_conv')
-
+                                            scope='inverted_bottleneck')
 
             net = slim.max_pool2d(inputs=net,
                                   kernel_size   =model_config.kernel_shape['r4'],
@@ -153,10 +157,14 @@ class ModelBuilder(object):
                                                 scope                       ='downsample_'+str(down_index))
                 downsample_out_stack.append(net)
 
-            center = self._get_separable_conv2d(ch_in           =net,
+            # center = self._get_separable_conv2d(ch_in           =net,
+            #                                     ch_out_num      =ch_in_num,
+            #                                     model_config    =model_config_separable_conv,
+            #                                     scope           ='separable_conv')
+            center = self.get_inverted_bottleneck(ch_in           =net,
                                                 ch_out_num      =ch_in_num,
                                                 model_config    =model_config_separable_conv,
-                                                scope           ='separable_conv')
+                                                scope           ='inverted_bottleneck')
 
             # add skip connection
             net = center
@@ -165,16 +173,31 @@ class ModelBuilder(object):
                 skip_connection = downsample_out_stack.pop()
 
                 with tf.variable_scope(name_or_scope='skip_connect'+str(up_index),values=[skip_connection]):
-                    skip_connection = self._get_separable_conv2d(ch_in      =skip_connection,
+                    # skip_connection = self._get_separable_conv2d(ch_in      =skip_connection,
+                    #                                              ch_out_num =ch_in_num,
+                    #                                              model_config=model_config_separable_conv,
+                    #                                              scope       ='separable_conv')
+                    skip_connection = self.get_inverted_bottleneck(ch_in      =skip_connection,
                                                                  ch_out_num =ch_in_num,
                                                                  model_config=model_config_separable_conv,
-                                                                 scope       ='separable_conv')
+                                                                 scope       ='inverted_bottleneck')
+
                 net = tf.add(x=net, y=skip_connection)
 
                 net = self.upsample_hourglass(ch_in                         =net,
                                               model_config                  =model_config,
                                               model_config_separable_conv   =model_config_separable_conv,
                                               scope                         ='upsample_'+str(up_index))
+
+
+
+            with tf.variable_scope(name_or_scope='skip_connect_io',values=[ch_in,net]):
+                # skip connection btw hourglass in and out
+                skip_connection = self.get_inverted_bottleneck(ch_in=ch_in,
+                                                               ch_out_num=ch_in_num,
+                                                               model_config=model_config_separable_conv,
+                                                               scope='inverted_bottleneck')
+                net = tf.add(net,skip_connection,name='out')
 
         return net
 
@@ -189,10 +212,14 @@ class ModelBuilder(object):
 
         ch_in_num   = ch_in.get_shape().as_list()[3]
         with tf.variable_scope(name_or_scope=scope,values=[ch_in]):
-            net = self._get_separable_conv2d(ch_in       = ch_in,
+            # net = self._get_separable_conv2d(ch_in       = ch_in,
+            #                                 ch_out_num  = ch_in_num,
+            #                                 model_config= model_config_separable_conv,
+            #                                 scope       = 'separable_conv')
+            net = self.get_inverted_bottleneck(ch_in       = ch_in,
                                             ch_out_num  = ch_in_num,
                                             model_config= model_config_separable_conv,
-                                            scope       = 'separable_conv')
+                                            scope       = 'inverted_bottleneck')
             net = slim.max_pool2d(inputs        =net,
                                   kernel_size   =model_config.maxpool_kernel_size,
                                   stride        =model_config.updown_rate,
@@ -221,10 +248,14 @@ class ModelBuilder(object):
                                            align_corners=False,
                                            name         ='resize')
 
-            net = self._get_separable_conv2d(ch_in       =net,
+            # net = self._get_separable_conv2d(ch_in       =net,
+            #                                 ch_out_num  =ch_in_num,
+            #                                 model_config=model_config_separable_conv,
+            #                                 scope       ='separable_conv')
+            net = self.get_inverted_bottleneck(ch_in       =net,
                                             ch_out_num  =ch_in_num,
                                             model_config=model_config_separable_conv,
-                                            scope       ='separable_conv')
+                                            scope       ='inverted_bottleneck')
 
         return net
 
@@ -287,6 +318,106 @@ class ModelBuilder(object):
                 # output activation
                 if model_config.activation_fn_pwise is not None:
                     net = model_config.activation_fn_pwise(net)
+
+        return net
+
+
+
+
+
+    def get_inverted_bottleneck(self,ch_in,
+                                ch_out_num,
+                                model_config,
+                                scope='inverted_bottleneck'):
+
+        conv2d_padding = 'SAME'
+        net = ch_in
+        kernel_size  = model_config.kernel_shape_dwise
+        stride       = model_config.stride_dwise
+        with tf.variable_scope(name_or_scope=scope, default_name='inverted_bottleneck', values=[ch_in]) as sc:
+
+            with slim.arg_scope([slim.conv2d],
+                                kernel_size=[1, 1],
+                                stride=[1, 1],
+                                padding='SAME',
+                                activation_fn=None,
+                                weights_initializer=model_config.weights_initializer,
+                                weights_regularizer=None,
+                                trainable=model_config.is_trainable):
+
+                with slim.arg_scope([model_config.normalizer_fn],
+                                    decay=model_config.batch_norm_decay,
+                                    fused=model_config.batch_norm_fused,
+                                    is_training=model_config.is_trainable,
+                                    activation_fn=model_config.activation_fn_pwise):
+
+                    # linear bottleneck by conv 1x1
+                    # followed by batch_norm and relu6
+
+                    net = slim.conv2d(inputs=net,
+                                      num_outputs=6*ch_out_num,
+                                      normalizer_fn=model_config.normalizer_fn,
+                                      biases_initializer=None,
+                                      scope=scope + '_bottleneck')
+
+                    '''
+                        Note that "slim.separable_convolution2cd with num_outputs == None" 
+                        provides equivalent implementation to the depthwise convolution 
+                        with ch_in_num == ch_out_num
+                    '''
+                    # depthwise conv with 3x3 conv
+                    # followed by batch_norm and relu6
+                    net = slim.separable_convolution2d(inputs=net,
+                                                       num_outputs=None,
+                                                       kernel_size=kernel_size,
+                                                       depth_multiplier=1.0,
+                                                       stride=[stride, stride],
+                                                       padding=conv2d_padding,
+                                                       activation_fn=None,
+                                                       normalizer_fn=model_config.normalizer_fn,
+                                                       biases_initializer=None,
+                                                       weights_initializer=model_config.weights_initializer,
+                                                       trainable=model_config.is_trainable,
+                                                       scope=scope + '_dwise_conv')
+
+                    # pointwise conv with 1x1 kernal
+                    # followed by batch_norm
+                    net = slim.conv2d(inputs=net,
+                                      num_outputs=ch_out_num,
+                                      normalizer_fn=None,
+                                      biases_initializer=model_config.biases_initializer,
+                                      scope=scope + '_pwise_conv')
+
+                    net = model_config.normalizer_fn(inputs=net,
+                                                     activation_fn=None)
+
+                ch_in_shape = ch_in.get_shape().as_list()
+                ch_in_num = ch_in_shape[3]
+
+                # shortcut connection
+                if ch_in_num != ch_out_num:
+                    shortcut_out = slim.conv2d(inputs=ch_in,
+                                               num_outputs=ch_out_num,
+                                               normalizer_fn=None,
+                                               biases_initializer=model_config.biases_initializer,
+                                               scope=scope + '_shortcut_conv1x1')
+                else:
+                    shortcut_out = ch_in
+
+                if stride > 1:
+                    shortcut_out = slim.max_pool2d(inputs=shortcut_out,
+                                                   kernel_size=[3,3],
+                                                   stride=[stride, stride],
+                                                   padding=conv2d_padding,
+                                                   scope=scope + '_shortcut_maxpool')
+
+
+
+            # elementwise sum for shortcut connection
+            net = tf.add(x=shortcut_out,
+                         y=net,
+                         name=scope + '_out')
+
 
         return net
 

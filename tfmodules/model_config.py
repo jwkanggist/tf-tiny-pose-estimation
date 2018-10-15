@@ -28,7 +28,7 @@ import json
 
 class ModelConfig(object):
 
-    def __init__(self):
+    def __init__(self,setuplog_dir):
 
         self.reception = RecepConfig()
         self.hourglass = HourglassConfig()
@@ -40,36 +40,33 @@ class ModelConfig(object):
 
         self.input_chnum   = 3
         self.output_chnum  = 14 # number of keypoints
-        self.channel_num   = 32
+        self.channel_num   = 64
 
         self.dtype = tf.float32
 
         # model config logging
-        self.model_config_dict      = self.__dict__
-        self.reception_config_dict  = self.reception.__dict__
-        self.hourglass_config_dict  = self.hourglass.__dict__
-        self.output_config_dict     = self.output.__dict__
+        if setuplog_dir is not None:
+            self.model_config_dict      = self.__dict__
+            self.reception_config_dict  = self.reception.__dict__
+            self.hourglass_config_dict  = self.hourglass.__dict__
+            self.output_config_dict     = self.output.__dict__
 
-        train_config = TrainConfig()
-        if not tf.gfile.Exists(train_config.setuplog_dir):
-            tf.gfile.MakeDirs(train_config.setuplog_dir)
+            model_config_filename       = setuplog_dir + 'model_config.json'
+            reception_config_filename   = setuplog_dir + 'recept_config.json'
+            hourglass_config_filename   = setuplog_dir + 'hourglass_config.json'
+            output_config_filename      = setuplog_dir + 'output_config.json'
 
-        model_config_filename       = train_config.setuplog_dir + 'model_config.json'
-        reception_config_filename   = train_config.setuplog_dir + 'recept_config.json'
-        hourglass_config_filename   = train_config.setuplog_dir + 'hourglass_config.json'
-        output_config_filename      = train_config.setuplog_dir + 'output_config.json'
+            with open(model_config_filename,'w') as fp:
+                json.dump(str(self.model_config_dict), fp)
 
-        with open(model_config_filename,'w') as fp:
-            json.dump(str(self.model_config_dict), fp)
+            with open(reception_config_filename,'w') as fp:
+                json.dump(str(self.reception_config_dict),fp)
 
-        with open(reception_config_filename,'w') as fp:
-            json.dump(str(self.reception_config_dict),fp)
+            with open(hourglass_config_filename,'w') as fp:
+                json.dump(str(self.hourglass_config_dict),fp)
 
-        with open(hourglass_config_filename,'w') as fp:
-            json.dump(str(self.hourglass_config_dict),fp)
-
-        with open(output_config_filename,'w') as fp:
-            json.dump(str(self.output_config_dict),fp)
+            with open(output_config_filename,'w') as fp:
+                json.dump(str(self.output_config_dict),fp)
 
 
 

@@ -32,15 +32,18 @@ TF_MODULE_DIR           = PROJ_HOME              + '/tfmodules'
 
 print("[pathmanager] PROJ HOME = %s" % PROJ_HOME)
 # tf module related directory
-EXPORT_DIR              = TF_MODULE_DIR          + '/export'
+# EXPORT_DIR              = PROJ_HOME          + '/export'
+EXPORT_DIR                = 'gs://tf-tiny-pose-est'
 COCO_DATALOAD_DIR       = TF_MODULE_DIR          + '/coco_dataload_modules'
 
 
 # data path
-DATASET_DIR                 = PROJ_HOME     + '/dataset/ai_challenger'
+# DATASET_DIR                 = PROJ_HOME     + '/dataset/ai_challenger'
+DATASET_DIR                  = '/home/jwkangmacpro2/dataset/ai_challenger'
+
 COCO_TRAINSET_DIR            = DATASET_DIR     + '/train/'
 COCO_VALIDSET_DIR            = DATASET_DIR     + '/valid/'
-
+LOCAL_LOG_DIR                = PROJ_HOME       + '/export'
 print("[pathmanager] DATASET_DIR = %s" % DATASET_DIR)
 print("[pathmanager] COCO_DATALOAD_DIR = %s" % COCO_DATALOAD_DIR)
 print("[pathmanager] EXPORT_DIR = %s" % EXPORT_DIR)
