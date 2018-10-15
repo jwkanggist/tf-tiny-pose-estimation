@@ -164,6 +164,8 @@ def train(dataset_train, dataset_valid,train_config,model_config):
     file_writer_valid.close()
 
 
+
+
 if __name__ == '__main__':
     tf.logging.set_verbosity(tf.logging.INFO)
     train_config    = TrainConfig()

@@ -128,6 +128,7 @@ class DataLoader(object):
 
 
 
+
     def input_fn(self, params=None):
         """Input function which provides a single batch for train or eval.
             Args:
@@ -155,36 +156,13 @@ class DataLoader(object):
 
 
         if self.is_training:
-
-            dataset.apply(tf.contrib.data.shuffle_and_repeat(buffer_size=self.train_config.shuffle_size,
-                                                             count=None))
-            # dataset elementwise shuffling
-            #
-            # dataset = dataset.shuffle(buffer_size=self.train_config.batch_size)
-            # tf.logging.info('[Input_fn] dataset.shuffle()')
-            # dataset = dataset.repeat(count=None)
-            # tf.logging.info('[Input_fn] dataset.repeat()')
-            # tf.logging.info('[Input_fn] Train dataset loading')
-
-        else:
-            dataset.repeat(count=None)
-            tf.logging.info('[Input_fn] test dataset loading')
+            tf.logging.info('[Input_fn] dataset shuffled.')
+            dataset.shuffle(buffer_size=self.train_config.shuffle_size)
 
 
         # # Read the data from disk in parallel
         # where cycle_length is the Number of training files to read in parallel.
         # multiprocessing_num === < the number of CPU cores >
-
-        # dataset = dataset.map(
-        #     lambda imgId: tuple(
-        #         tf.py_func(
-        #             func=self._parse_function,
-        #             inp=[imgId],
-        #             Tout=[tf.float32, tf.float32]
-        #         )
-        #     ), num_parallel_calls=multiprocessing_num)
-        # dataset = dataset.batch(batch_size=self.train_config.batch_size)
-
 
         dataset = dataset.apply(tf.contrib.data.map_and_batch(
                                     map_func=lambda imgId: tuple(
@@ -196,10 +174,14 @@ class DataLoader(object):
                                     num_parallel_calls=self.train_config.multiprocessing_num,
                                     drop_remainder=True))
 
-        dataset = dataset.map(self._set_shapes, num_parallel_calls=self.train_config.multiprocessing_num)
+        dataset = dataset.map(self._set_shapes,
+                              num_parallel_calls=self.train_config.multiprocessing_num)
+        dataset = dataset.repeat(count=None)
 
         # Prefetch overlaps in-feed with training
-        dataset = dataset.prefetch(tf.contrib.data.AUTOTUNE)
+        # dataset = dataset.prefetch(tf.contrib.data.AUTOTUNE)
+        dataset = dataset.prefetch(self.train_config.prefetch_size)
+
         tf.logging.info('[Input_fn] dataset pipeline building complete')
 
         return dataset

@@ -37,6 +37,7 @@ class TrainConfig(object):
         self.loss_fn                = tf.nn.l2_loss
         self.batch_size             = 32
         self.shuffle_size           = 1024
+        self.prefetch_size          = 1024
         self.metric_fn              = tf.metrics.root_mean_squared_error
 
 
@@ -56,7 +57,6 @@ class TrainConfig(object):
 
         self.root_logdir = EXPORT_DIR
         self.local_logdir = LOCAL_LOG_DIR
-
         self.is_summary_heatmap = True
 
         self.tflogdir       = "{}/run-{}/".format(self.root_logdir+'/tf_logs', now)
