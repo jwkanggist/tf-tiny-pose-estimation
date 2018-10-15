@@ -153,11 +153,14 @@ class DataLoader(object):
 
 
         if self.is_training:
-            dataset.apply(tf.contrib.data.shuffle_and_repeat(buffer_size=self.train_config.train_data_size))
+            dataset.apply(tf.contrib.data.shuffle_and_repeat(buffer_size=self.train_config.train_data_size,
+                                                             count=None))
             tf.logging.info('[Input_fn] Train dataset loading')
 
         else:
-            dataset.repeat()
+            # dataset.repeat(count=None)
+            dataset.apply(tf.contrib.data.shuffle_and_repeat(buffer_size=self.train_config.train_data_size,
+                                                             count=None))
             tf.logging.info('[Input_fn] Valid dataset loading')
 
 
@@ -186,8 +189,6 @@ class DataLoader(object):
                                     drop_remainder=True))
 
         dataset = dataset.map(self._set_shapes, num_parallel_calls=self.train_config.multiprocessing_num)
-
-
 
         # Prefetch overlaps in-feed with training
         dataset = dataset.prefetch(tf.contrib.data.AUTOTUNE)

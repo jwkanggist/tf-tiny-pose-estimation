@@ -83,20 +83,19 @@ class DataLoaderTest(tf.test.TestCase):
                 use_bfloat16=False)
 
         dataset = dataset_train
-        dataset                 = dataset.input_fn()
-        iterator_train          = dataset.make_initializable_iterator()
-        feature_op, labels_op   = iterator_train.get_next()
+        dataset                     = dataset.input_fn()
+        iterator_train              = dataset.make_initializable_iterator()
+        feature_op, labels_op       = iterator_train.get_next()
         argmax_2d_top_op            = argmax_2d(tensor=labels_op[:, :, :, 0:1])
         argmax_2d_neck_op           = argmax_2d(tensor=labels_op[:, :, :, 1:2])
         argmax_2d_rshoulder_op      = argmax_2d(tensor=labels_op[:, :, :, 2:3])
         argmax_2d_lshoulder_op      = argmax_2d(tensor=labels_op[:, :, :, 3:4])
 
-        metric_dict_op = metric_fn(labels=labels_op,logits=labels_op,pck_threshold=0.2)
-        metric_fn_var  = tf.get_collection(tf.GraphKeys.LOCAL_VARIABLES,scope='metric_fn')
-        metric_fn_var_init = tf.variables_initializer(metric_fn_var)
+        metric_dict_op      = metric_fn(labels=labels_op,logits=labels_op,pck_threshold=0.2)
+        metric_fn_var       = tf.get_collection(tf.GraphKeys.LOCAL_VARIABLES,scope='metric_fn')
+        metric_fn_var_init  = tf.variables_initializer(metric_fn_var)
 
         favorite_image_index = 5
-
 
         with self.test_session() as sess:
             sess.run(iterator_train.initializer)

@@ -31,6 +31,8 @@ PROJ_HOME               = getcwd()
 TF_MODULE_DIR           = PROJ_HOME              + '/tfmodules'
 
 print("[pathmanager] PROJ HOME = %s" % PROJ_HOME)
+
+
 # tf module related directory
 EXPORT_DIR              = PROJ_HOME          + '/export'
 # EXPORT_DIR                = 'gs://tf-tiny-pose-est'

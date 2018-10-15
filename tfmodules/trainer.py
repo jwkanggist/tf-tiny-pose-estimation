@@ -56,13 +56,11 @@ def train(dataset_train, dataset_valid,train_config,model_config):
 
 
     # model building =========================
-    # < complete codes here >
     modelbuilder = ModelBuilder(model_config=model_config)
     pred_heatmap = modelbuilder.get_model(model_in=inputs,
                                           scope='model')
 
     # traning ops =============================================
-    # < complete codes here >
     loss_heatmap_op        = train_config.loss_fn( (true_heatmap - pred_heatmap)  / train_config.batch_size )
     loss_regularizer_op    = tf.losses.get_regularization_loss()
     loss_op                = loss_heatmap_op + loss_regularizer_op
@@ -155,8 +153,8 @@ def train(dataset_train, dataset_valid,train_config,model_config):
                 file_writer_valid.flush()
 
                 print('At step = %d, train elapsed_time = %.1f ms' % (global_step_eval, train_elapsed_time))
-                print("Training set loss (avg over batch)= %.2f   " % (loss_train))
-                print("valid set Err loss (total batch)= %.2f " % (loss_valid))
+                print("Training set loss (over batch)= %.2f" % (loss_train))
+                print("valid set Err loss (over batch)= %.2f" % (loss_valid))
                 print("--------------------------------------------")
 
             if global_step_eval % train_config.ckpt_step == 0:
