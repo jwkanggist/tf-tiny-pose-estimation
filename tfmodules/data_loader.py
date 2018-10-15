@@ -159,7 +159,7 @@ class DataLoader(object):
 
         else:
             # dataset.repeat(count=None)
-            dataset.apply(tf.contrib.data.shuffle_and_repeat(buffer_size=self.train_config.train_data_size,
+            dataset.apply(tf.contrib.data.shuffle_and_repeat(buffer_size=self.train_config.test_data_size,
                                                              count=None))
             tf.logging.info('[Input_fn] Valid dataset loading')
 
