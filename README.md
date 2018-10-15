@@ -3,22 +3,10 @@ Readme for  Tiny pose estimation
 - Final update: 2018 Oct 
 - All right reserved @ Jaewook Kang 2018
 
-## Pycocotools (WIN)
-
-* MFC++
-- https://blog.naver.com/swkim4610/221335020498
- 
-* Pycocotools
-pip install git+https://github.com/philferriere/cocoapi.git#subdirectory=PythonAPI
-related git: https://github.com/philferriere/cocoapi
-
 
 ## About
-The aim of this repository is to introduce an exemplary TF project in practice.
-We show the example with respect to [MNIST](http://yann.lecun.com/exdb/mnist/) classification by Lenet5.
-This project is composed of several `.py` files,
-each of which undertakes single role and responsibility 
-according to the OOP philosophy.
+The aim of this repository is to introduce a tiny pose estimation in Tensorflow.
+
 
 ```bash
 - data_loader.py    : Preparing and feeding the dataset in batchwise by using tf.data
@@ -29,6 +17,44 @@ according to the OOP philosophy.
 - eval.py           : Evaluating the model with respect to test dataset by loading a ckpt
 
 ```
+
+## Installation
+
+### Compiler/Interface Dependencies
+- Tensorflow >=1.9
+- Python2 <= 2.7.12
+- Python3 <= 3.6.0
+- opencv-python >= 3.4.2
+- pycocotools   == 2.0.0
+- Cython        == 0.28.4
+- tensorpack    == 0.8.0
+- Tf plot       == 0.2.0.dev0 
+
+
+
+### Git Clone
+```bash
+git clone https://github.com/jwkanggist/tf-tiny-pose-estimation
+# cd tf-tiny-pose-estimation/
+git init
+
+pip install -r requirement.txt
+./sh_scripts/install_tensorflow_gpu.sh
+```
+
+
+### Pycocotools (WIN)
+> For OSX and Ubuntu, we can install pycocotool by pip
+
+
+* MFC++
+- https://blog.naver.com/swkim4610/221335020498
+ 
+* Pycocotools
+pip install git+https://github.com/philferriere/cocoapi.git#subdirectory=PythonAPI
+related git: https://github.com/philferriere/cocoapi
+
+
 
 
 ## How to Run
@@ -46,24 +72,27 @@ python ./tfmodule/eval.py
 
 ```bash
 ./tfmodule/
-├── data
-│   └── mnist
+├── dataset
+│   └── ai_challenger
+│
 ├── export
+│   ├── train_setup_log
 │   └── tf_logs
+│
+├── coco_dataload_modules
+│   ├── testcodes
+│   │   └── test_dataloader.py
+│   │
+│   ├── dataset_augment.py
+│   └── dataset_prepare.py
+│
 ├── data_loader.py
 ├── eval.py
 ├── model_builder.py
 ├── model_config.py
-├── testcodes
-│   └── test_dataloader.py
 ├── train_config.py
 └── trainer.py
 ```
-
-### Compiler/Interface Dependencies
-- Tensorflow >=1.9
-- Python2 <= 2.7.12
-- Python3 <= 3.6.0
 
 
 ### Related Materials
