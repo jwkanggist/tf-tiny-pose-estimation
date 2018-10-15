@@ -86,10 +86,6 @@ class ModelBuilder(object):
                                     activation_fn=model_config.activation_fn,
                                     scope='batch_norm_7x7conv')
 
-            # net = self._get_separable_conv2d(ch_in          =net,
-            #                                 ch_out_num      =num_outputs,
-            #                                 model_config    =model_config_separable_conv,
-            #                                 scope='separable_conv')
             net = self.get_inverted_bottleneck(ch_in          =net,
                                             ch_out_num      =num_outputs,
                                             model_config    =model_config_separable_conv,
@@ -157,10 +153,6 @@ class ModelBuilder(object):
                                                 scope                       ='downsample_'+str(down_index))
                 downsample_out_stack.append(net)
 
-            # center = self._get_separable_conv2d(ch_in           =net,
-            #                                     ch_out_num      =ch_in_num,
-            #                                     model_config    =model_config_separable_conv,
-            #                                     scope           ='separable_conv')
             center = self.get_inverted_bottleneck(ch_in           =net,
                                                 ch_out_num      =ch_in_num,
                                                 model_config    =model_config_separable_conv,
@@ -173,10 +165,7 @@ class ModelBuilder(object):
                 skip_connection = downsample_out_stack.pop()
 
                 with tf.variable_scope(name_or_scope='skip_connect'+str(up_index),values=[skip_connection]):
-                    # skip_connection = self._get_separable_conv2d(ch_in      =skip_connection,
-                    #                                              ch_out_num =ch_in_num,
-                    #                                              model_config=model_config_separable_conv,
-                    #                                              scope       ='separable_conv')
+
                     skip_connection = self.get_inverted_bottleneck(ch_in      =skip_connection,
                                                                  ch_out_num =ch_in_num,
                                                                  model_config=model_config_separable_conv,
@@ -248,10 +237,6 @@ class ModelBuilder(object):
                                            align_corners=False,
                                            name         ='resize')
 
-            # net = self._get_separable_conv2d(ch_in       =net,
-            #                                 ch_out_num  =ch_in_num,
-            #                                 model_config=model_config_separable_conv,
-            #                                 scope       ='separable_conv')
             net = self.get_inverted_bottleneck(ch_in       =net,
                                             ch_out_num  =ch_in_num,
                                             model_config=model_config_separable_conv,
