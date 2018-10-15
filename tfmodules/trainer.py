@@ -115,6 +115,7 @@ def train(dataset_train, dataset_valid,train_config,model_config):
         tf.logging.info('<<<< Training start! >>>>')
         tf.logging.info('[train] training_epochs = %s' % train_config.training_epochs)
         tf.logging.info('------------------------------------')
+
         for epoch in range(train_config.training_epochs):
 
             train_start_time = time.time()
@@ -130,7 +131,7 @@ def train(dataset_train, dataset_valid,train_config,model_config):
             if train_config.display_step == 0:
                 continue
             elif global_step_eval % train_config.display_step == 0:
-                print('[train] curr epochs = %s' % epoch)
+                print('[train] curr global_step = %s' % global_step_eval)
 
                 # # valid model
                 loss_train = loss_heatmap_op.eval(feed_dict={dataset_handle: train_handle,

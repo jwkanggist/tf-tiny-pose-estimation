@@ -20,7 +20,7 @@ import sys
 from os import getcwd
 from os import chdir
 
-chdir('..')
+chdir('../..')
 sys.path.insert(0,getcwd())
 print ('getcwd() = %s' % getcwd())
 
@@ -51,6 +51,7 @@ sys.path.insert(0,COCO_DATALOAD_DIR)
 # < here you need import your module >
 from model_config import ModelConfig
 from train_config import TrainConfig
+from train_config import PreprocessingConfig
 
 from data_loader   import DataLoader
 from utils import metric_fn
@@ -60,7 +61,8 @@ from utils import argmax_2d
 
 IMAGE_MAX_VALUE = 255.0
 train_config   = TrainConfig()
-model_config   = ModelConfig()
+model_config   = ModelConfig(setuplog_dir=train_config.setuplog_dir)
+preproc_config = PreprocessingConfig(setuplog_dir = train_config.setuplog_dir)
 
 class DataLoaderTest(tf.test.TestCase):
 
@@ -80,6 +82,9 @@ class DataLoaderTest(tf.test.TestCase):
                 is_training=True,
                 data_dir=datadir,
                 transpose_input=False,
+                train_config    = train_config,
+                model_config    = model_config,
+                preproc_config  = preproc_config,
                 use_bfloat16=False)
 
         dataset = dataset_train
@@ -91,7 +96,7 @@ class DataLoaderTest(tf.test.TestCase):
         argmax_2d_rshoulder_op      = argmax_2d(tensor=labels_op[:, :, :, 2:3])
         argmax_2d_lshoulder_op      = argmax_2d(tensor=labels_op[:, :, :, 3:4])
 
-        metric_dict_op      = metric_fn(labels=labels_op,logits=labels_op,pck_threshold=0.2)
+        metric_dict_op      = metric_fn(labels=labels_op,logits=labels_op,pck_threshold=0.2,train_config=train_config)
         metric_fn_var       = tf.get_collection(tf.GraphKeys.LOCAL_VARIABLES,scope='metric_fn')
         metric_fn_var_init  = tf.variables_initializer(metric_fn_var)
 
@@ -103,113 +108,114 @@ class DataLoaderTest(tf.test.TestCase):
             # init variable used in metric_fn_var_init
             sess.run(metric_fn_var_init)
 
-            for n in range(0,50):
+            for n in range(0,700):
 
-                # argmax2d find coordinate of head
-                # containing one heatmap
-                feature_numpy, labels_numpy, \
-                coord_top_numpy,\
-                coord_neck_numpy,\
-                coord_rshoulder_numpy,\
-                coord_lshoulder_numpy,\
-                metric_dict   \
-                    = sess.run([feature_op,
-                                labels_op,
-                                argmax_2d_top_op,
-                                argmax_2d_neck_op,
-                                argmax_2d_rshoulder_op,
-                                argmax_2d_lshoulder_op,
-                                metric_dict_op])
+                # # argmax2d find coordinate of head
+                # # containing one heatmap
+                # feature_numpy, labels_numpy, \
+                # coord_top_numpy,\
+                # coord_neck_numpy,\
+                # coord_rshoulder_numpy,\
+                # coord_lshoulder_numpy,\
+                # metric_dict   \
+                #     = sess.run([feature_op,
+                #                 labels_op,
+                #                 argmax_2d_top_op,
+                #                 argmax_2d_neck_op,
+                #                 argmax_2d_rshoulder_op,
+                #                 argmax_2d_lshoulder_op,
+                #                 metric_dict_op])
+
+                print(' n = %s' %n)
+                feature_numpy, labels_numpy, = sess.run([feature_op,labels_op])
+
+                #
+                # # some post processing
+                # image_sample          = feature_numpy[favorite_image_index,:,:,:]
+                #
+                # print('[test_data_loader_coco] sum of single label heatmap =%s'% \
+                #       labels_numpy[favorite_image_index, :, :, 0].sum().sum())
+                #
+                # # 256 to 64
+                # heatmap_size        = int(model_config._output_size)
+                # image_sample_resized  = cv2.resize(image_sample.astype(np.uint8),
+                #                                    dsize=(heatmap_size,
+                #                                           heatmap_size),
+                #                                    interpolation=cv2.INTER_CUBIC)
+                # '''
+                #     marking the annotation
+                #     # # keypoint_top[0] : x
+                #     # # keypoint_top[1] : y
+                # '''
+                # keypoint_top        = coord_top_numpy[favorite_image_index].astype(np.uint8)
+                # keypoint_neck       = coord_neck_numpy[favorite_image_index].astype(np.uint8)
+                # keypoint_rshoulder  = coord_rshoulder_numpy[favorite_image_index].astype(np.uint8)
+                # keypoint_lshoulder  = coord_lshoulder_numpy[favorite_image_index].astype(np.uint8)
+                #
+                # image_sample_resized[keypoint_top[1],keypoint_top[0],0] = IMAGE_MAX_VALUE
+                # image_sample_resized[keypoint_top[1],keypoint_top[0],1] = IMAGE_MAX_VALUE
+                # image_sample_resized[keypoint_top[1],keypoint_top[0],2] = IMAGE_MAX_VALUE
+                #
+                # image_sample_resized[keypoint_neck[1],keypoint_neck[0],0] = IMAGE_MAX_VALUE
+                # image_sample_resized[keypoint_neck[1],keypoint_neck[0],1] = IMAGE_MAX_VALUE
+                # image_sample_resized[keypoint_neck[1],keypoint_neck[0],2] = IMAGE_MAX_VALUE
+                #
+                # image_sample_resized[keypoint_rshoulder[1],keypoint_rshoulder[0],0] = IMAGE_MAX_VALUE
+                # image_sample_resized[keypoint_rshoulder[1],keypoint_rshoulder[0],1] = IMAGE_MAX_VALUE
+                # image_sample_resized[keypoint_rshoulder[1],keypoint_rshoulder[0],2] = IMAGE_MAX_VALUE
+                #
+                # image_sample_resized[keypoint_lshoulder[1],keypoint_lshoulder[0],0] = IMAGE_MAX_VALUE
+                # image_sample_resized[keypoint_lshoulder[1],keypoint_lshoulder[0],1] = IMAGE_MAX_VALUE
+                # image_sample_resized[keypoint_lshoulder[1],keypoint_lshoulder[0],2] = IMAGE_MAX_VALUE
+                #
+                #
+                #
+                # print ('[test_data_loader_coco] keypoint_top       = (%s,%s)' % (keypoint_top[0],keypoint_top[1]))
+                # print ('[test_data_loader_coco] keypoint_neck      = (%s,%s)' % (keypoint_neck[0],keypoint_neck[1]))
+                # print ('[test_data_loader_coco] keypoint_rshoulder = (%s,%s)' % (keypoint_rshoulder[0],keypoint_rshoulder[1]))
+                # print ('[test_data_loader_coco] keypoint_lshoulder = (%s,%s)' % (keypoint_lshoulder[0],keypoint_lshoulder[1]))
+                #
+                # print (metric_dict)
+                # print('---------------------------------------------------------')
 
 
-                # feature_numpy, labels_numpy, = sess.run([feature_op,labels_op])
+                # plt.figure(1)
+                # plt.imshow(feature_numpy[favorite_image_index].astype(np.uint8))
+                # plt.show()
+                #
+                # plt.figure(2)
+                # plt.imshow(image_sample_resized.astype(np.uint8))
+                # plt.show()
 
-                # some post processing
-                image_sample          = feature_numpy[favorite_image_index,:,:,:]
-
-                print('[test_data_loader_coco] sum of single label heatmap =%s'% \
-                      labels_numpy[favorite_image_index, :, :, 0].sum().sum())
-
-                # 256 to 64
-                heatmap_size        = int(model_config._output_size)
-                image_sample_resized  = cv2.resize(image_sample.astype(np.uint8),
-                                                   dsize=(heatmap_size,
-                                                          heatmap_size),
-                                                   interpolation=cv2.INTER_CUBIC)
-                '''
-                    marking the annotation
-                    # # keypoint_top[0] : x
-                    # # keypoint_top[1] : y
-                '''
-                keypoint_top        = coord_top_numpy[favorite_image_index].astype(np.uint8)
-                keypoint_neck       = coord_neck_numpy[favorite_image_index].astype(np.uint8)
-                keypoint_rshoulder  = coord_rshoulder_numpy[favorite_image_index].astype(np.uint8)
-                keypoint_lshoulder  = coord_lshoulder_numpy[favorite_image_index].astype(np.uint8)
-
-                image_sample_resized[keypoint_top[1],keypoint_top[0],0] = IMAGE_MAX_VALUE
-                image_sample_resized[keypoint_top[1],keypoint_top[0],1] = IMAGE_MAX_VALUE
-                image_sample_resized[keypoint_top[1],keypoint_top[0],2] = IMAGE_MAX_VALUE
-
-                image_sample_resized[keypoint_neck[1],keypoint_neck[0],0] = IMAGE_MAX_VALUE
-                image_sample_resized[keypoint_neck[1],keypoint_neck[0],1] = IMAGE_MAX_VALUE
-                image_sample_resized[keypoint_neck[1],keypoint_neck[0],2] = IMAGE_MAX_VALUE
-
-                image_sample_resized[keypoint_rshoulder[1],keypoint_rshoulder[0],0] = IMAGE_MAX_VALUE
-                image_sample_resized[keypoint_rshoulder[1],keypoint_rshoulder[0],1] = IMAGE_MAX_VALUE
-                image_sample_resized[keypoint_rshoulder[1],keypoint_rshoulder[0],2] = IMAGE_MAX_VALUE
-
-                image_sample_resized[keypoint_lshoulder[1],keypoint_lshoulder[0],0] = IMAGE_MAX_VALUE
-                image_sample_resized[keypoint_lshoulder[1],keypoint_lshoulder[0],1] = IMAGE_MAX_VALUE
-                image_sample_resized[keypoint_lshoulder[1],keypoint_lshoulder[0],2] = IMAGE_MAX_VALUE
-
-
-
-                print ('[test_data_loader_coco] keypoint_top       = (%s,%s)' % (keypoint_top[0],keypoint_top[1]))
-                print ('[test_data_loader_coco] keypoint_neck      = (%s,%s)' % (keypoint_neck[0],keypoint_neck[1]))
-                print ('[test_data_loader_coco] keypoint_rshoulder = (%s,%s)' % (keypoint_rshoulder[0],keypoint_rshoulder[1]))
-                print ('[test_data_loader_coco] keypoint_lshoulder = (%s,%s)' % (keypoint_lshoulder[0],keypoint_lshoulder[1]))
-
-                print (metric_dict)
-                print('---------------------------------------------------------')
-
-
-                plt.figure(1)
-                plt.imshow(feature_numpy[favorite_image_index].astype(np.uint8))
-                plt.show()
-
-                plt.figure(2)
-                plt.imshow(image_sample_resized.astype(np.uint8))
-                plt.show()
-
-                #-----------
-                labels_top_numpy        = labels_numpy[favorite_image_index, :, :, 0] \
-                                          * IMAGE_MAX_VALUE
-                labels_neck_numpy       = labels_numpy[favorite_image_index, :, :, 1] \
-                                          * IMAGE_MAX_VALUE
-                labels_rshoulder_numpy  = labels_numpy[favorite_image_index, :, :, 2] \
-                                          * IMAGE_MAX_VALUE
-                labels_lshoulder_numpy  = labels_numpy[favorite_image_index, :, :, 3] \
-                                          * IMAGE_MAX_VALUE
-                ### heatmaps
-                plt.figure(3)
-                plt.imshow(labels_top_numpy.astype(np.uint8))
-                plt.title('TOP')
-                plt.show()
-
-                plt.figure(4)
-                plt.imshow(labels_neck_numpy.astype(np.uint8))
-                plt.title('NECK')
-                plt.show()
-
-                plt.figure(5)
-                plt.imshow(labels_rshoulder_numpy.astype(np.uint8))
-                plt.title('Rshoulder')
-                plt.show()
-
-                plt.figure(6)
-                plt.imshow(labels_lshoulder_numpy.astype(np.uint8))
-                plt.title('Lshoulder')
-                plt.show()
+                # #-----------
+                # labels_top_numpy        = labels_numpy[favorite_image_index, :, :, 0] \
+                #                           * IMAGE_MAX_VALUE
+                # labels_neck_numpy       = labels_numpy[favorite_image_index, :, :, 1] \
+                #                           * IMAGE_MAX_VALUE
+                # labels_rshoulder_numpy  = labels_numpy[favorite_image_index, :, :, 2] \
+                #                           * IMAGE_MAX_VALUE
+                # labels_lshoulder_numpy  = labels_numpy[favorite_image_index, :, :, 3] \
+                #                           * IMAGE_MAX_VALUE
+                # ### heatmaps
+                # plt.figure(3)
+                # plt.imshow(labels_top_numpy.astype(np.uint8))
+                # plt.title('TOP')
+                # plt.show()
+                #
+                # plt.figure(4)
+                # plt.imshow(labels_neck_numpy.astype(np.uint8))
+                # plt.title('NECK')
+                # plt.show()
+                #
+                # plt.figure(5)
+                # plt.imshow(labels_rshoulder_numpy.astype(np.uint8))
+                # plt.title('Rshoulder')
+                # plt.show()
+                #
+                # plt.figure(6)
+                # plt.imshow(labels_lshoulder_numpy.astype(np.uint8))
+                # plt.title('Lshoulder')
+                # plt.show()
 
 if __name__ == '__main__':
     tf.test.main()

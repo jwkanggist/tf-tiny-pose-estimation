@@ -154,7 +154,7 @@ class DataLoader(object):
         imgIds          = self.TRAIN_ANNO.getImgIds()
         dataset         = tf.data.Dataset.from_tensor_slices(imgIds)
 
-
+        dataset = dataset.repeat(count=None)
         if self.is_training:
             tf.logging.info('[Input_fn] dataset shuffled.')
             dataset.shuffle(buffer_size=self.train_config.shuffle_size)
@@ -175,11 +175,10 @@ class DataLoader(object):
                                     drop_remainder=True))
 
         # cache entire dataset in memory after preprocessing
-        # dataset = dataset.cache()
+        dataset = dataset.cache()
 
         dataset = dataset.map(self._set_shapes,
                               num_parallel_calls=self.train_config.multiprocessing_num)
-        dataset = dataset.repeat(count=None)
 
         # Prefetch overlaps in-feed with training
         # dataset = dataset.prefetch(tf.contrib.data.AUTOTUNE)

@@ -46,7 +46,8 @@ class TrainConfig(object):
         self.ckpt_step      = 100
 
         self.train_data_size      = 22000
-        self.test_data_size       = 1500
+        self.valid_data_size      = 1500
+        self.eval_data_size       = 1500
 
         self.training_epochs = int(float(self.train_data_size/self.batch_size) * 10.0)
         self.multiprocessing_num = 4
