@@ -21,4 +21,34 @@ from __future__ import print_function
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
 
+import numpy as np
+import time
+import sys
 
+from path_manager import DATASET_DIR
+from path_manager import EXPORT_DIR
+from path_manager import TF_MODULE_DIR
+from path_manager import COCO_DATALOAD_DIR
+
+
+sys.path.insert(0,TF_MODULE_DIR)
+sys.path.insert(0,EXPORT_DIR)
+sys.path.insert(0,COCO_DATALOAD_DIR)
+
+from model_config import ModelConfig
+from train_config import PreprocessingConfig
+from train_config import TrainConfig
+
+from model_builder import ModelBuilder
+from data_loader   import DataLoader
+from utils         import metric_fn
+from utils         import summary_eval_fn
+
+
+
+
+if __name__ == '__main__':
+
+    tf.logging.set_verbosity(tf.logging.INFO)
+    train_config = TrainConfig()
+    model_config = ModelConfig()
