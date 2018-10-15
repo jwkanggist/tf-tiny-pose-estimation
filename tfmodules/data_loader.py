@@ -175,7 +175,7 @@ class DataLoader(object):
                                     drop_remainder=True))
 
         # cache entire dataset in memory after preprocessing
-        dataset = dataset.cache()
+        # dataset = dataset.cache()
 
         dataset = dataset.map(self._set_shapes,
                               num_parallel_calls=self.train_config.multiprocessing_num)
