@@ -36,7 +36,7 @@ class TrainConfig(object):
         self.opt_fn                 = tf.train.AdamOptimizer
         self.loss_fn                = tf.nn.l2_loss
         self.batch_size             = 32
-        self.shuffle_size           = 32
+        self.shuffle_size           = 1024
         self.metric_fn              = tf.metrics.root_mean_squared_error
 
 
