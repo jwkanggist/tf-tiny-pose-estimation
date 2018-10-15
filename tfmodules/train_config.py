@@ -33,12 +33,12 @@ class TrainConfig(object):
         self.learning_rate              = 1e-3
         self.learning_rate_decay_step   = 2000
         self.learning_rate_decay_rate   = 0.95
-        self.opt_fn                 = tf.train.AdamOptimizer
-        self.loss_fn                = tf.nn.l2_loss
-        self.batch_size             = 32
-        self.shuffle_size           = 1024
-        self.prefetch_size          = 1024
-        self.metric_fn              = tf.metrics.root_mean_squared_error
+        self.opt_fn                     = tf.train.AdamOptimizer
+        self.loss_fn                    = tf.nn.l2_loss
+        self.batch_size                 = 32
+        self.shuffle_size               = 1024
+        self.prefetch_size              = 1024
+        self.metric_fn                  = tf.metrics.root_mean_squared_error
 
 
         # the number of step between evaluation
@@ -56,8 +56,8 @@ class TrainConfig(object):
         # tensorboard config
         now = datetime.utcnow().strftime("%Y%m%d%H%M%S")
 
-        self.root_logdir = EXPORT_DIR
-        self.local_logdir = LOCAL_LOG_DIR
+        self.root_logdir        = EXPORT_DIR
+        self.local_logdir       = LOCAL_LOG_DIR
         self.is_summary_heatmap = True
 
         self.tflogdir       = "{}/run-{}/".format(self.root_logdir+'/tf_logs', now)
@@ -65,7 +65,7 @@ class TrainConfig(object):
 
         self.setuplog_dir   = "{}/run-{}/".format(self.local_logdir+'/train_setup_log',now)
 
-        print('[train_config] tflog    dir  = %s' % self.tflogdir)
+        print('[train_config] tflog    dir = %s' % self.tflogdir)
         print('[train_config] setuplog dir = %s' % self.setuplog_dir)
         self.train_config_dict = self.__dict__
 
