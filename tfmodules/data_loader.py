@@ -91,6 +91,8 @@ class DataLoader(object):
 
 
 
+
+
     def _parse_function(self,imgId, ann=None):
         """
         :param imgId:
@@ -158,10 +160,8 @@ class DataLoader(object):
             tf.logging.info('[Input_fn] Train dataset loading')
 
         else:
-            # dataset.repeat(count=None)
-            dataset.apply(tf.contrib.data.shuffle_and_repeat(buffer_size=self.train_config.test_data_size,
-                                                             count=None))
-            tf.logging.info('[Input_fn] Valid dataset loading')
+            dataset.repeat(count=None)
+            tf.logging.info('[Input_fn] test dataset loading')
 
 
         # # Read the data from disk in parallel
@@ -177,6 +177,7 @@ class DataLoader(object):
         #         )
         #     ), num_parallel_calls=multiprocessing_num)
         # dataset = dataset.batch(batch_size=self.train_config.batch_size)
+
 
         dataset = dataset.apply(tf.contrib.data.map_and_batch(
                                     map_func=lambda imgId: tuple(

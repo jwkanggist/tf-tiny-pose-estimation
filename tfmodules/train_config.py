@@ -35,7 +35,7 @@ class TrainConfig(object):
         self.learning_rate_decay_rate   = 0.95
         self.opt_fn                 = tf.train.AdamOptimizer
         self.loss_fn                = tf.nn.l2_loss
-        self.batch_size             = 32
+        self.batch_size             = 16
         self.metric_fn              = tf.metrics.root_mean_squared_error
 
 
@@ -74,6 +74,9 @@ class TrainConfig(object):
 
         with open(train_config_filename,'w') as fp:
             json.dump(str(self.train_config_dict),fp)
+
+
+
 
 
     def send_setuplog_to_gcp_bucket(self):
