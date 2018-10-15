@@ -156,16 +156,15 @@ class DataLoader(object):
 
         if self.is_training:
 
-            # dataset.apply(tf.contrib.data.shuffle_and_repeat(buffer_size=self.train_config.train_data_size,
-            #                                                  count=None))
+            dataset.apply(tf.contrib.data.shuffle_and_repeat(buffer_size=self.train_config.shuffle_size,
+                                                             count=None))
             # dataset elementwise shuffling
-
-            dataset = dataset.shuffle(buffer_size=self.train_config.train_data_size)
-            tf.logging.info('[Input_fn] dataset.shuffle()')
-            dataset = dataset.repeat(count=None)
-            tf.logging.info('[Input_fn] dataset.repeat()')
-
-            tf.logging.info('[Input_fn] Train dataset loading')
+            #
+            # dataset = dataset.shuffle(buffer_size=self.train_config.batch_size)
+            # tf.logging.info('[Input_fn] dataset.shuffle()')
+            # dataset = dataset.repeat(count=None)
+            # tf.logging.info('[Input_fn] dataset.repeat()')
+            # tf.logging.info('[Input_fn] Train dataset loading')
 
         else:
             dataset.repeat(count=None)
