@@ -99,7 +99,7 @@ def train(dataset_train, dataset_valid,train_config,model_config):
     init_var = tf.global_variables_initializer()
     saver    = tf.train.Saver()
 
-    sess_config = tf.ConfigProto(log_device_placement=True,
+    sess_config = tf.ConfigProto(log_device_placement=False,
                                  gpu_options=tf.GPUOptions(allow_growth=True))
 
     with tf.Session(config = sess_config) as sess:
