@@ -105,9 +105,10 @@ class HourglassConfig(object):
     def __init__(self):
         self.updown_rate            = 2
         self.maxpool_kernel_size    =[3,3]
-        self.num_stage              = 4
+        self.num_stage              = 5
         self.center_conv_num        = 3
         self.skip_conv_num          = 4
+        self.center_ch_num          = 32 #output channel num
 
 
 

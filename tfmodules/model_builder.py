@@ -159,32 +159,45 @@ class ModelBuilder(object):
 
             # center
             center = slim.repeat(net,model_config.center_conv_num,self._get_inverted_bottleneck,
-                                 ch_out_num=ch_in_num,
+                                 ch_out_num=model_config.center_ch_num,
                                  model_config=model_config_separable_conv,
                                  scope='inverted_bottleneck')
 
             # add skip connection
             net = center
+            hourglass_output_stack = []
             for up_index in range(0,model_config.num_stage):
 
                 skip_connection = downsample_out_stack.pop()
                 with tf.variable_scope(name_or_scope='skip_connect',values=[skip_connection]):
                     skip_connection = slim.repeat(skip_connection,model_config.skip_conv_num,self._get_inverted_bottleneck,
-                                                  ch_out_num=ch_in_num,
+                                                  ch_out_num=model_config.center_ch_num,
                                                   model_config=model_config_separable_conv,
                                                   scope='invbo_skip_'+str(up_index))
-
                 net = tf.add(x=net, y=skip_connection)
+                #---------------------------------#
+                # hourglass_output_stack.append(net)
+                #---------------------------------#
 
                 net = self.upsample_hourglass(ch_in                         =net,
                                               model_config                  =model_config,
                                               model_config_separable_conv   =model_config_separable_conv,
                                               scope                         ='upsample_'+str(up_index))
+                ## -------------------------------------
+
+            # resize and concat
+
 
         return net
 
 
-
+    # def _get_dense_hourglass_layer(self,ch_in,
+    #                                 model_config,
+    #                                 model_config_separable_conv,
+    #                                 scope='hourglass'):
+    #
+    #
+    #     return net
 
 
     def downsample_hourglass(self,ch_in,
@@ -194,10 +207,7 @@ class ModelBuilder(object):
 
         ch_in_num   = ch_in.get_shape().as_list()[3]
         with tf.variable_scope(name_or_scope=scope,values=[ch_in]):
-            # net = self._get_separable_conv2d(ch_in       = ch_in,
-            #                                 ch_out_num  = ch_in_num,
-            #                                 model_config= model_config_separable_conv,
-            #                                 scope       = 'separable_conv')
+
             net = self._get_inverted_bottleneck(ch_in       = ch_in,
                                                 ch_out_num  = ch_in_num,
                                                 model_config= model_config_separable_conv,
@@ -315,6 +325,9 @@ class ModelBuilder(object):
         net = ch_in
         kernel_size  = model_config.kernel_shape_dwise
         stride       = model_config.stride_dwise
+
+        # number of input channel
+        ch_in_num = ch_in.get_shape().as_list()[3]
         with tf.variable_scope(name_or_scope=scope, default_name='inverted_bottleneck', values=[ch_in]) as sc:
 
             with slim.arg_scope([slim.conv2d],
@@ -336,7 +349,7 @@ class ModelBuilder(object):
                     # followed by batch_norm and relu6
 
                     net = slim.conv2d(inputs=net,
-                                      num_outputs=7*ch_out_num,
+                                      num_outputs=7*ch_in_num,
                                       normalizer_fn=model_config.normalizer_fn,
                                       biases_initializer=None,
                                       scope=scope + '_bottleneck')
