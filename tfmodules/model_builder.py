@@ -41,13 +41,13 @@ class ModelBuilder(object):
                                                    model_config_separable_conv  =self._model_config.separable_conv,
                                                    scope                        ='reception')
 
+            with tf.name_scope(name='hg_layer',values=[recept_out]):
+                hg_out = self._get_hourglass_layer(ch_in                       =recept_out,
+                                                   model_config                 =self._model_config.hourglass,
+                                                   model_config_separable_conv  =self._model_config.separable_conv,
+                                                   scope                        ='hourglass')
 
-            hg_out = self._get_hourglass_layer(ch_in                       =recept_out,
-                                               model_config                 =self._model_config.hourglass,
-                                               model_config_separable_conv  =self._model_config.separable_conv,
-                                               scope                        ='hourglass')
-
-            output_in = tf.add(hg_out,recept_out,'skip_hourglass')
+                output_in = tf.add(hg_out,recept_out,'skip_hourglass')
 
             model_out = self._get_output_layer(ch_in                    =output_in,
                                                num_outputs              =self._model_config.output_chnum,
@@ -169,11 +169,10 @@ class ModelBuilder(object):
             for up_index in range(0,model_config.num_stage):
 
                 skip_connection = downsample_out_stack.pop()
-                with tf.variable_scope(name_or_scope='skip_connect',values=[skip_connection]):
-                    skip_connection = slim.repeat(skip_connection,model_config.skip_conv_num,self._get_inverted_bottleneck,
-                                                  ch_out_num=model_config.center_ch_num,
-                                                  model_config=model_config_separable_conv,
-                                                  scope='invbo_skip_'+str(up_index))
+                skip_connection = slim.repeat(skip_connection,model_config.skip_conv_num,self._get_inverted_bottleneck,
+                                              ch_out_num=model_config.center_ch_num,
+                                              model_config=model_config_separable_conv,
+                                              scope='invbo_skip_'+str(up_index))
                 net = tf.add(x=net, y=skip_connection)
                 #---------------------------------#
                 # hourglass_output_stack.append(net)
