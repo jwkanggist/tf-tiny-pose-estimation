@@ -77,8 +77,11 @@ def train(dataset_train, dataset_valid,train_config,model_config):
     train_op    = opt_op.minimize(loss_op, global_step)
 
     # For Tensorboard ===========================================
-    file_writer_train = tf.summary.FileWriter(logdir=train_config.tflogdir +'/train')
-    file_writer_valid = tf.summary.FileWriter(logdir=train_config.tflogdir +'/valid')
+    file_writer_train = tf.summary.FileWriter(logdir=train_config.tflogdir +'train/')
+    file_writer_valid = tf.summary.FileWriter(logdir=train_config.tflogdir +'valid/')
+
+    tf.logging.info('[Summary] tf.summary is logging on %s' % train_config.tflogdir +'train/')
+    tf.logging.info('[Summary] tf.summary is logging on %s' % train_config.tflogdir +'valid/')
 
     file_writer_train.add_graph(tf.get_default_graph())
 
@@ -143,12 +146,12 @@ def train(dataset_train, dataset_valid,train_config,model_config):
                 summary_train = write_op.eval(feed_dict={dataset_handle: train_handle,
                                                         modelbuilder.dropout_keeprate:1.0})
                 file_writer_train.add_summary(summary_train, global_step_eval)
-                file_writer_train.flush()
+                # file_writer_train.flush()
 
                 summary_valid  = write_op.eval(feed_dict={dataset_handle: valid_handle,
                                                         modelbuilder.dropout_keeprate: 1.0})
                 file_writer_valid.add_summary(summary_valid,global_step_eval)
-                file_writer_valid.flush()
+                # file_writer_valid.flush()
 
                 print('At step = %d, train elapsed_time = %.1f ms' % (global_step_eval, train_elapsed_time))
                 print("Training set loss (over batch)= %.2f" % (loss_train))
