@@ -40,7 +40,7 @@ class ModelConfig(object):
 
         self.input_chnum   = 3
         self.output_chnum  = 14 # number of keypoints
-        self.channel_num   = 64
+        self.channel_num   = 32
 
         self.dtype = tf.float32
 
@@ -80,6 +80,8 @@ class RecepConfig(object):
 
         self.weights_initializer    = tf.contrib.layers.xavier_initializer()
         self.biases_initializer     = slim.init_ops.zeros_initializer()
+        self.weights_regularizer    = tf.contrib.layers.l2_regularizer(4E-5)
+
         self.activation_fn          = tf.nn.relu
         self.normalizer_fn          = slim.batch_norm
         self.is_trainable           = True
@@ -104,6 +106,8 @@ class HourglassConfig(object):
         self.updown_rate            = 2
         self.maxpool_kernel_size    =[3,3]
         self.num_stage              = 3
+        self.center_conv_num        = 3
+        self.skip_conv_num          = 4
 
 
 
@@ -135,6 +139,8 @@ class SeparableConfig(object):
 
         self.weights_initializer    = tf.contrib.layers.xavier_initializer()
         self.biases_initializer     = slim.init_ops.zeros_initializer()
+        self.weights_regularizer    = tf.contrib.layers.l2_regularizer(4E-5)
+
 
         self.normalizer_fn          = slim.batch_norm
         self.is_trainable           = True

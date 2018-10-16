@@ -72,21 +72,22 @@ class ModelBuilder(object):
                               kernel_size           =model_config.kernel_shape['r1'],
                               stride                =model_config.strides['r1'],
                               weights_initializer   =model_config.weights_initializer,
+                              weights_regularizer   =model_config.weights_regularizer,
                               biases_initializer    =model_config.biases_initializer,
                               normalizer_fn         =None,
                               activation_fn         =None,
                               padding               ='SAME',
                               trainable             =model_config.is_trainable,
-                              scope='7x7conv')
+                              scope                 ='7x7conv')
 
             net = slim.batch_norm(  inputs= net,
                                     decay       =model_config.batch_norm_decay,
                                     fused       =model_config.batch_norm_fused,
                                     is_training =model_config.is_trainable,
                                     activation_fn=model_config.activation_fn,
-                                    scope='batch_norm_7x7conv')
+                                    scope       ='batch_norm_7x7conv')
 
-            net = self.get_inverted_bottleneck(ch_in          =net,
+            net = self._get_inverted_bottleneck(ch_in          =net,
                                             ch_out_num      =num_outputs,
                                             model_config    =model_config_separable_conv,
                                             scope='inverted_bottleneck')
@@ -153,23 +154,23 @@ class ModelBuilder(object):
                                                 scope                       ='downsample_'+str(down_index))
                 downsample_out_stack.append(net)
 
-            center = self.get_inverted_bottleneck(ch_in           =net,
-                                                ch_out_num      =ch_in_num,
-                                                model_config    =model_config_separable_conv,
-                                                scope           ='inverted_bottleneck')
+            # center
+            center = slim.repeat(net,model_config.center_conv_num,self._get_inverted_bottleneck,
+                                 ch_out_num=ch_in_num,
+                                 model_config=model_config_separable_conv,
+                                 scope='inverted_bottleneck')
 
             # add skip connection
             net = center
             for up_index in range(0,model_config.num_stage):
 
                 skip_connection = downsample_out_stack.pop()
+                with tf.variable_scope(name_or_scope='skip_connect',values=[skip_connection]):
+                    skip_connection = slim.repeat(skip_connection,model_config.skip_conv_num,self._get_inverted_bottleneck,
+                                                  ch_out_num=ch_in_num,
+                                                  model_config=model_config_separable_conv,
+                                                  scope='invbo_skip_'+str(up_index))
 
-                with tf.variable_scope(name_or_scope='skip_connect'+str(up_index),values=[skip_connection]):
-
-                    skip_connection = self.get_inverted_bottleneck(ch_in      =skip_connection,
-                                                                 ch_out_num =ch_in_num,
-                                                                 model_config=model_config_separable_conv,
-                                                                 scope       ='inverted_bottleneck')
 
                 net = tf.add(x=net, y=skip_connection)
 
@@ -182,7 +183,7 @@ class ModelBuilder(object):
 
             with tf.variable_scope(name_or_scope='skip_connect_io',values=[ch_in,net]):
                 # skip connection btw hourglass in and out
-                skip_connection = self.get_inverted_bottleneck(ch_in=ch_in,
+                skip_connection = self._get_inverted_bottleneck(ch_in=ch_in,
                                                                ch_out_num=ch_in_num,
                                                                model_config=model_config_separable_conv,
                                                                scope='inverted_bottleneck')
@@ -205,15 +206,16 @@ class ModelBuilder(object):
             #                                 ch_out_num  = ch_in_num,
             #                                 model_config= model_config_separable_conv,
             #                                 scope       = 'separable_conv')
-            net = self.get_inverted_bottleneck(ch_in       = ch_in,
-                                            ch_out_num  = ch_in_num,
-                                            model_config= model_config_separable_conv,
-                                            scope       = 'inverted_bottleneck')
+            net = self._get_inverted_bottleneck(ch_in       = ch_in,
+                                                ch_out_num  = ch_in_num,
+                                                model_config= model_config_separable_conv,
+                                                scope       = 'inverted_bottleneck')
             net = slim.max_pool2d(inputs        =net,
                                   kernel_size   =model_config.maxpool_kernel_size,
                                   stride        =model_config.updown_rate,
                                   padding       ='SAME',
                                   scope='maxpool')
+
         return net
 
 
@@ -237,7 +239,7 @@ class ModelBuilder(object):
                                            align_corners=False,
                                            name         ='resize')
 
-            net = self.get_inverted_bottleneck(ch_in       =net,
+            net = self._get_inverted_bottleneck(ch_in       =net,
                                             ch_out_num  =ch_in_num,
                                             model_config=model_config_separable_conv,
                                             scope       ='inverted_bottleneck')
@@ -281,6 +283,7 @@ class ModelBuilder(object):
                                                    normalizer_fn        =model_config.normalizer_fn,
                                                    biases_initializer   =None,
                                                    weights_initializer  =model_config.weights_initializer,
+                                                   weights_regularizer  =model_config.weights_regularizer,
                                                    trainable            =model_config.is_trainable,
                                                    scope                =scope + '_dwise_conv')
                 # intermediate activation
@@ -297,6 +300,7 @@ class ModelBuilder(object):
                                   normalizer_fn         =model_config.normalizer_fn,
                                   biases_initializer    =None,
                                   weights_initializer   =model_config.weights_initializer,
+                                  weights_regularizer   =model_config.weights_regularizer,
                                   trainable             =model_config.is_trainable,
                                   scope                 =scope + '_pwise_conv')
 
@@ -310,7 +314,7 @@ class ModelBuilder(object):
 
 
 
-    def get_inverted_bottleneck(self,ch_in,
+    def _get_inverted_bottleneck(self,ch_in,
                                 ch_out_num,
                                 model_config,
                                 scope='inverted_bottleneck'):
@@ -327,7 +331,7 @@ class ModelBuilder(object):
                                 padding='SAME',
                                 activation_fn=None,
                                 weights_initializer=model_config.weights_initializer,
-                                weights_regularizer=None,
+                                weights_regularizer=model_config.weights_regularizer,
                                 trainable=model_config.is_trainable):
 
                 with slim.arg_scope([model_config.normalizer_fn],
@@ -340,7 +344,7 @@ class ModelBuilder(object):
                     # followed by batch_norm and relu6
 
                     net = slim.conv2d(inputs=net,
-                                      num_outputs=6*ch_out_num,
+                                      num_outputs=7*ch_out_num,
                                       normalizer_fn=model_config.normalizer_fn,
                                       biases_initializer=None,
                                       scope=scope + '_bottleneck')
@@ -362,6 +366,7 @@ class ModelBuilder(object):
                                                        normalizer_fn=model_config.normalizer_fn,
                                                        biases_initializer=None,
                                                        weights_initializer=model_config.weights_initializer,
+                                                       weights_regularizer=model_config.weights_regularizer,
                                                        trainable=model_config.is_trainable,
                                                        scope=scope + '_dwise_conv')
 
