@@ -141,6 +141,7 @@ class DataLoader(object):
 
             doc reference: https://www.tensorflow.org/api_docs/python/tf/data/TFRecordDataset
         """
+        tf.logging.info('[Input_fn]------------------------------------')
         tf.logging.info('[Input_fn] is_training = %s' % self.is_training)
 
         json_filename_split = DATASET_DIR.split('/')
@@ -159,7 +160,7 @@ class DataLoader(object):
 
         if self.is_training:
             tf.logging.info('[Input_fn] dataset shuffled and repeated.')
-            dataset = dataset.apply(tf.contrib.data.shuffle_and_repeat(buffer_size=self.train_config.train_data_size,
+            dataset = dataset.apply(tf.contrib.data.shuffle_and_repeat(buffer_size=self.train_config.shuffle_size,
                                                                         count=None))
         else:
             tf.logging.info('[Input_fn] dataset repeated only.')
@@ -186,8 +187,8 @@ class DataLoader(object):
                               num_parallel_calls=self.train_config.multiprocessing_num)
 
         # Prefetch overlaps in-feed with training
-        # dataset = dataset.prefetch(tf.contrib.data.AUTOTUNE)
-        dataset = dataset.prefetch(self.train_config.prefetch_size)
+        dataset = dataset.prefetch(tf.contrib.data.AUTOTUNE)
+        # dataset = dataset.prefetch(self.train_config.prefetch_size)
         tf.logging.info('[Input_fn] dataset pipeline building complete')
 
         return dataset
