@@ -35,18 +35,21 @@ class ModelBuilder(object):
     def get_model(self, model_in,scope):
 
         with tf.variable_scope(name_or_scope=scope, values=[model_in]):
-            net = self._get_reception_layer(ch_in                       =model_in,
-                                           num_outputs                  =self._model_config.channel_num,
-                                           model_config                 =self._model_config.reception,
-                                           model_config_separable_conv  =self._model_config.separable_conv,
-                                           scope                        ='reception')
+            recept_out = self._get_reception_layer(ch_in                       =model_in,
+                                                   num_outputs                  =self._model_config.channel_num,
+                                                   model_config                 =self._model_config.reception,
+                                                   model_config_separable_conv  =self._model_config.separable_conv,
+                                                   scope                        ='reception')
 
-            net = self._get_hourglass_layer(ch_in                       =net,
-                                           model_config                 =self._model_config.hourglass,
-                                           model_config_separable_conv  =self._model_config.separable_conv,
-                                           scope                        ='hourglass')
 
-            model_out = self._get_output_layer(ch_in                    =net,
+            hg_out = self._get_hourglass_layer(ch_in                       =recept_out,
+                                               model_config                 =self._model_config.hourglass,
+                                               model_config_separable_conv  =self._model_config.separable_conv,
+                                               scope                        ='hourglass')
+
+            output_in = tf.add(hg_out,recept_out,'skip_hourglass')
+
+            model_out = self._get_output_layer(ch_in                    =output_in,
                                                num_outputs              =self._model_config.output_chnum,
                                                model_config             =self._model_config.output,
                                                scope                    ='output')
@@ -171,23 +174,12 @@ class ModelBuilder(object):
                                                   model_config=model_config_separable_conv,
                                                   scope='invbo_skip_'+str(up_index))
 
-
                 net = tf.add(x=net, y=skip_connection)
 
                 net = self.upsample_hourglass(ch_in                         =net,
                                               model_config                  =model_config,
                                               model_config_separable_conv   =model_config_separable_conv,
                                               scope                         ='upsample_'+str(up_index))
-
-
-
-            with tf.variable_scope(name_or_scope='skip_connect_io',values=[ch_in,net]):
-                # skip connection btw hourglass in and out
-                skip_connection = self._get_inverted_bottleneck(ch_in=ch_in,
-                                                               ch_out_num=ch_in_num,
-                                                               model_config=model_config_separable_conv,
-                                                               scope='inverted_bottleneck')
-                net = tf.add(net,skip_connection,name='out')
 
         return net
 
