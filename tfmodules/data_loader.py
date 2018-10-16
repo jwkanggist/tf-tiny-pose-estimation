@@ -73,6 +73,7 @@ class DataLoader(object):
 
 
 
+
     def _set_shapes(self,img, heatmap):
 
         batch_size = self.train_config.batch_size
@@ -154,11 +155,13 @@ class DataLoader(object):
         imgIds          = self.TRAIN_ANNO.getImgIds()
         dataset         = tf.data.Dataset.from_tensor_slices(imgIds)
 
-        dataset = dataset.repeat(count=None)
         if self.is_training:
-            tf.logging.info('[Input_fn] dataset shuffled.')
-            dataset.shuffle(buffer_size=self.train_config.shuffle_size)
-
+            tf.logging.info('[Input_fn] dataset shuffled and repeated.')
+            dataset = dataset.apply(tf.contrib.data.shuffle_and_repeat(buffer_size=self.train_config.shuffle_size,
+                                                             count=None))
+        else:
+            tf.logging.info('[Input_fn] dataset repeated only.')
+            dataset = dataset.repeat(count=None)
 
         # # Read the data from disk in parallel
         # where cycle_length is the Number of training files to read in parallel.
