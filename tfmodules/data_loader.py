@@ -181,14 +181,13 @@ class DataLoader(object):
                                     drop_remainder=True))
 
         # cache entire dataset in memory after preprocessing
-        # dataset = dataset.cache()
+        # dataset = dataset.cache() # do not use this code for OOM problem
 
         dataset = dataset.map(self._set_shapes,
                               num_parallel_calls=self.train_config.multiprocessing_num)
 
         # Prefetch overlaps in-feed with training
         dataset = dataset.prefetch(tf.contrib.data.AUTOTUNE)
-        # dataset = dataset.prefetch(self.train_config.prefetch_size)
         tf.logging.info('[Input_fn] dataset pipeline building complete')
 
         return dataset

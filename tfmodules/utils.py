@@ -67,20 +67,64 @@ def metric_fn(labels, logits,pck_threshold,train_config):
     Returns:
     A dict of the metrics to return from evaluation.
     """
-
+    '''
+        Top = 0
+        Neck = 1
+        RShoulder = 2
+        RElbow = 3
+        
+        RWrist = 4
+        LShoulder = 5
+        LElbow = 6
+        LWrist = 7
+        
+        RHip = 8
+        RKnee = 9
+        RAnkle = 10
+        LHip = 11
+        
+        LKnee = 12
+        LAnkle = 13
+    '''
     with tf.name_scope('metric_fn',values=[labels, logits,pck_threshold]):
-
         # get predicted coordinate
-        pred_head_xy       = argmax_2d(logits[:,:,:,0:1])
-        pred_neck_xy       = argmax_2d(logits[:,:,:,1:2])
-        pred_rshoulder_xy  = argmax_2d(logits[:,:,:,2:3])
-        pred_lshoulder_xy  = argmax_2d(logits[:,:,:,3:4])
+        pred_head_xy        = argmax_2d(logits[:,:,:,0:1])
+        pred_neck_xy        = argmax_2d(logits[:,:,:,1:2])
+        pred_rshoulder_xy   = argmax_2d(logits[:,:,:,2:3])
+        pred_relbow_xy      = argmax_2d(logits[:,:,:,3:4])
 
-        label_head_xy      = argmax_2d(labels[:,:,:,0:1])
-        label_neck_xy      = argmax_2d(labels[:,:,:,1:2])
-        label_rshoulder_xy = argmax_2d(labels[:,:,:,2:3])
-        label_lshoulder_xy = argmax_2d(labels[:,:,:,3:4])
+        pred_rwrist_xy      = argmax_2d(logits[:,:,:,4:5])
+        pred_lshoulder_xy   = argmax_2d(logits[:,:,:,5:6])
+        pred_lelbow_xy      = argmax_2d(logits[:,:,:,6:7])
+        pred_lwrist_xy      = argmax_2d(logits[:,:,:,7:8])
 
+        pred_rhip_xy        = argmax_2d(logits[:,:,:,8:9])
+        pred_rknee_xy       = argmax_2d(logits[:,:,:,9:10])
+        pred_rankle_xy      = argmax_2d(logits[:,:,:,10:11])
+        pred_lhip_xy        = argmax_2d(logits[:,:,:,11:12])
+
+        pred_lknee_xy       = argmax_2d(logits[:,:,:,12:13])
+        pred_lankle_xy      = argmax_2d(logits[:,:,:,13:14])
+
+
+
+        label_head_xy       = argmax_2d(labels[:,:,:,0:1])
+        label_neck_xy       = argmax_2d(labels[:,:,:,1:2])
+        label_rshoulder_xy  = argmax_2d(labels[:,:,:,2:3])
+        label_relbow_xy     = argmax_2d(labels[:,:,:,3:4])
+
+        label_rwrist_xy     = argmax_2d(labels[:,:,:,4:5])
+        label_lshoulder_xy  = argmax_2d(labels[:,:,:,5:6])
+        label_lelbow_xy     = argmax_2d(labels[:,:,:,6:7])
+        label_lwrist_xy     = argmax_2d(labels[:,:,:,7:8])
+
+        label_rhip_xy       = argmax_2d(labels[:,:,:,8:9])
+        label_rknee_xy      = argmax_2d(labels[:,:,:,9:10])
+        label_rankle_xy     = argmax_2d(labels[:,:,:,10:11])
+        label_lhip_xy       = argmax_2d(logits[:,:,:,11:12])
+
+        label_lknee_xy      = argmax_2d(logits[:,:,:,12:13])
+        label_lankle_xy     = argmax_2d(logits[:,:,:,13:14])
 
         # error distance measure
         metric_err_fn                 = train_config.metric_fn
@@ -89,30 +133,92 @@ def metric_fn(labels, logits,pck_threshold,train_config):
         head_neck_dist, update_op_head_neck_dist     = metric_err_fn(labels=label_head_xy,
                                                       predictions=label_neck_xy)
 
-        errdist_head,update_op_errdist_head             = metric_err_fn(labels=label_head_xy,
-                                                                        predictions=pred_head_xy)
-        errdist_neck,update_op_errdist_neck             = metric_err_fn(labels=label_neck_xy,
-                                                                        predictions= pred_neck_xy)
-        errdist_rshoulder, update_op_errdist_rshoulder  = metric_err_fn(labels=label_rshoulder_xy,
-                                                                        predictions= pred_rshoulder_xy)
-        errdist_lshoulder, update_op_errdist_lshoulder  = metric_err_fn(labels=label_lshoulder_xy,
-                                                                        predictions= pred_lshoulder_xy)
+        errdist_head,update_op_errdist_head             = metric_err_fn(labels      =label_head_xy,
+                                                                        predictions =pred_head_xy)
+        errdist_neck,update_op_errdist_neck             = metric_err_fn(labels      =label_neck_xy,
+                                                                        predictions =pred_neck_xy)
+        errdist_rshoulder,  update_op_errdist_rshoulder  = metric_err_fn(labels     =label_rshoulder_xy,
+                                                                        predictions =pred_rshoulder_xy)
+        errdist_relbow,     update_op_errdist_relbow     = metric_err_fn(labels     =label_relbow_xy,
+                                                                        predictions =pred_relbow_xy)
+
+        errdist_rwrist,     update_op_errdist_rwrist      = metric_err_fn(labels     =label_rwrist_xy,
+                                                                         predictions=pred_rwrist_xy)
+        errdist_lshoulder,  update_op_errdist_lshoulder  = metric_err_fn(labels     =label_lshoulder_xy,
+                                                                        predictions =pred_lshoulder_xy)
+        errdist_lelbow,     update_op_errdist_lelbow     = metric_err_fn(labels     =label_lelbow_xy,
+                                                                        predictions =pred_lelbow_xy)
+        errdist_lwrist,     update_op_errdist_lwrist     = metric_err_fn(labels     =label_lwrist_xy,
+                                                                        predictions =pred_lwrist_xy)
+
+
+        errdist_rhip,       update_op_errdist_rhip       = metric_err_fn(labels     =label_rhip_xy,
+                                                                        predictions =pred_rhip_xy)
+        errdist_rknee,      update_op_errdist_rknee      = metric_err_fn(labels     =label_rknee_xy,
+                                                                         predictions=pred_rknee_xy)
+        errdist_rankle,     update_op_errdist_rankle     = metric_err_fn(labels     =label_rankle_xy,
+                                                                         predictions=pred_rankle_xy)
+        errdist_lhip,       update_op_errdist_lhip       = metric_err_fn(labels     =label_lhip_xy,
+                                                                         predictions=pred_lhip_xy)
+
+        errdist_lknee,       update_op_errdist_lknee     = metric_err_fn(labels     =label_lknee_xy,
+                                                                        predictions =pred_lknee_xy)
+        errdist_lankle,     update_op_errdist_lankle     = metric_err_fn(labels     =label_lankle_xy,
+                                                                        predictions =pred_lankle_xy)
+
         # percentage of correct keypoints
         total_errdist = (errdist_head +
                          errdist_neck +
                          errdist_rshoulder +
-                         errdist_lshoulder) / head_neck_dist
+                         errdist_relbow +
+                         errdist_rwrist    +
+                         errdist_lshoulder +
+                         errdist_lelbow    +
+                         errdist_lwrist    +
+                         errdist_rhip      +
+                         errdist_rknee     +
+                         errdist_rankle    +
+                         errdist_lhip      +
+                         errdist_lknee      +
+                         errdist_lankle    ) / head_neck_dist
 
         update_op_total_errdist = (update_op_errdist_head +
                                    update_op_errdist_neck +
                                    update_op_errdist_rshoulder +
-                                   update_op_errdist_lshoulder) / update_op_head_neck_dist
+                                   update_op_errdist_relbow +
+                                   update_op_errdist_rwrist    +
+                                   update_op_errdist_lshoulder +
+                                   update_op_errdist_lelbow    +
+                                   update_op_errdist_lwrist    +
+                                   update_op_errdist_rhip      +
+                                   update_op_errdist_rknee     +
+                                   update_op_errdist_rankle    +
+                                   update_op_errdist_lhip      +
+                                   update_op_errdist_lknee      +
+                                   update_op_errdist_lankle) / update_op_head_neck_dist
 
         pck =            tf.metrics.percentage_below(values=total_errdist,
                                                    threshold=pck_threshold,
                                                    name=    'pck_' + str(pck_threshold))
+        '''
+            Top = 0
+            Neck = 1
+            RShoulder = 2
+            RElbow = 3
 
+            RWrist = 4
+            LShoulder = 5
+            LElbow = 6
+            LWrist = 7
 
+            RHip = 8
+            RKnee = 9
+            RAnkle = 10
+            LHip = 11
+
+            LKnee = 12
+            LAnkle = 13
+        '''
         # form a dictionary
         metric_dict = {
                             'label_head_neck_dist' : (head_neck_dist/head_neck_dist,
@@ -121,16 +227,39 @@ def metric_fn(labels, logits,pck_threshold,train_config):
                             'total_errdis': (total_errdist,update_op_total_errdist),
 
                             'errdist_head': (errdist_head/head_neck_dist,
-                                             update_op_errdist_head/update_op_head_neck_dist),
-
+                                                    update_op_errdist_head/update_op_head_neck_dist),
                             'errdist_neck': (errdist_neck/head_neck_dist,
-                                             update_op_errdist_neck/update_op_head_neck_dist),
-
+                                                    update_op_errdist_neck/update_op_head_neck_dist),
                             'errdist_rshou': (errdist_rshoulder/head_neck_dist,
                                                     update_op_errdist_rshoulder /update_op_head_neck_dist),
+                            'errdist_relbow': (errdist_relbow / head_neck_dist,
+                                               update_op_errdist_relbow / update_op_head_neck_dist),
 
+
+                            'errdist_rwrist': (errdist_rwrist / head_neck_dist,
+                                                     update_op_errdist_rwrist / update_op_head_neck_dist),
                             'errdist_lshou': (errdist_lshoulder/head_neck_dist,
                                                     update_op_errdist_lshoulder /update_op_head_neck_dist),
+                            'errdist_lelbow': (errdist_lelbow / head_neck_dist,
+                                                    update_op_errdist_lelbow / update_op_head_neck_dist),
+                            'errdist_lwrist': (errdist_lwrist/head_neck_dist,
+                                                    update_op_errdist_lwrist /  update_op_head_neck_dist),
+
+
+                            'errdist_rhip': (errdist_rhip / head_neck_dist,
+                                                    update_op_errdist_rhip /  update_op_head_neck_dist),
+                            'errdist_rknee': (errdist_rknee / head_neck_dist,
+                                                    update_op_errdist_rknee / update_op_head_neck_dist),
+                            'errdist_rankle': (errdist_rankle / head_neck_dist,
+                                                    update_op_errdist_rankle / update_op_head_neck_dist),
+                            'errdist_lhip' :  (errdist_lhip / head_neck_dist,
+                                                    update_op_errdist_lhip / update_op_head_neck_dist),
+
+
+                            'errdist_lknee' : (errdist_lknee / head_neck_dist,
+                                                    update_op_errdist_lknee / update_op_head_neck_dist),
+                            'errdist_lankle': (errdist_lankle / head_neck_dist,
+                                                    update_op_errdist_lankle / update_op_head_neck_dist),
                             'pck': pck
                         }
 
