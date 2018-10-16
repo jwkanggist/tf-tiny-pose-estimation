@@ -113,10 +113,10 @@ def train(dataset_train, dataset_valid,train_config,model_config):
 
         tf.logging.info('====================================')
         tf.logging.info('<<<< Training start! >>>>')
-        tf.logging.info('[train] training_epochs = %s' % train_config.training_epochs)
+        tf.logging.info('[train] total_steps = %s' % train_config.total_steps)
         tf.logging.info('------------------------------------')
 
-        for epoch in range(train_config.training_epochs):
+        for epoch in range(train_config.total_steps):
 
             train_start_time = time.time()
 

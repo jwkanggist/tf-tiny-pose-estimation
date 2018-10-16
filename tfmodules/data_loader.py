@@ -155,10 +155,12 @@ class DataLoader(object):
         imgIds          = self.TRAIN_ANNO.getImgIds()
         dataset         = tf.data.Dataset.from_tensor_slices(imgIds)
 
+
+
         if self.is_training:
             tf.logging.info('[Input_fn] dataset shuffled and repeated.')
-            dataset = dataset.apply(tf.contrib.data.shuffle_and_repeat(buffer_size=self.train_config.shuffle_size,
-                                                             count=None))
+            dataset = dataset.apply(tf.contrib.data.shuffle_and_repeat(buffer_size=self.train_config.train_data_size,
+                                                                        count=None))
         else:
             tf.logging.info('[Input_fn] dataset repeated only.')
             dataset = dataset.repeat(count=None)
@@ -186,7 +188,6 @@ class DataLoader(object):
         # Prefetch overlaps in-feed with training
         # dataset = dataset.prefetch(tf.contrib.data.AUTOTUNE)
         dataset = dataset.prefetch(self.train_config.prefetch_size)
-
         tf.logging.info('[Input_fn] dataset pipeline building complete')
 
         return dataset
