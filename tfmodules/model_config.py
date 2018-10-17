@@ -29,17 +29,19 @@ class ModelConfig(object):
 
     def __init__(self,setuplog_dir):
 
-        self.reception = RecepConfig()
-        self.hourglass = HourglassConfig(channel_num=self.channel_num)
-        self.output    = OutputConfig()
-        self.separable_conv = SeparableConfig()
-
         self._input_size   = 256
         self._output_size  = 64
 
         self.input_chnum   = 3
         self.output_chnum  = 14 # number of keypoints
         self.channel_num   = 64
+
+        self.reception = RecepConfig()
+        self.hourglass = HourglassConfig(channel_num=self.channel_num)
+        self.output    = OutputConfig()
+        self.separable_conv = SeparableConfig()
+
+
 
         self.dtype = tf.float32
 
