@@ -64,7 +64,7 @@ make
 
 2) Training
 ```bash
-python ./tf_module/trainer.py
+python ./tf_modules/trainer.py
 ```
 
 3) Monitoring by Tensorboard
@@ -104,7 +104,8 @@ tensorboard --logdir ./export/tf_logs
 - `./export/tf_logs/run-yyyymmddHHmmss/pb_and_ckpt/`: We save `ckpt` and `pb` files resulting from each training run.
 
 
-## Related Materials
+## Related Materials (All Korean)
+- [Jaewook Kang, Human pose estimation 101 with Tensorflow](https://docs.google.com/presentation/d/1O2Yg46Yql1UJfzGSdteKpV3lXPkNmKT9nG2p3bqXspI/edit)
 - [Jaewook Kang, Tensorflow Practical Project Configuration](https://docs.google.com/presentation/d/1zyubZQKQ3tQvQppp_7ljPnWXwCNmf3UDMQhP2GBn7ng/edit#slide=id.p1)
 
 
