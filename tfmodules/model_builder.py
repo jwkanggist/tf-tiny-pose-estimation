@@ -120,7 +120,7 @@ class ModelBuilder(object):
 
 
         with tf.variable_scope(name_or_scope=scope, values=[ch_in]):
-            net = slim.conv2d(inputs                =ch_in,
+            out = slim.conv2d(inputs                =ch_in,
                               num_outputs           =num_outputs,
                               kernel_size           =model_config.kernel_shape,
                               stride                =model_config.stride,
@@ -133,11 +133,18 @@ class ModelBuilder(object):
                               trainable             =model_config.is_trainable,
                               scope='1x1conv')
 
-            out = slim.dropout(inputs= net,
-                               keep_prob=self.dropout_keeprate)
+            if self.dropout_keeprate < 1.0:
+                out = slim.dropout(inputs= out,
+                                   keep_prob=self.dropout_keeprate)
 
-            if model_config.activation_fn is not None:
-                out = model_config.activation_fn(out)
+            out = slim.batch_norm(  inputs= out,
+                                    decay       =model_config.batch_norm_decay,
+                                    fused       =model_config.batch_norm_fused,
+                                    is_training =model_config.is_trainable,
+                                    activation_fn=model_config.activation_fn,
+                                    scope       ='batch_norm_outlayer')
+
+
         return out
 
 
