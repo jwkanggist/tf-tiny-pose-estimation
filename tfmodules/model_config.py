@@ -20,7 +20,6 @@ from __future__ import print_function
 
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
-from train_config import TrainConfig
 import json
 
 
@@ -40,7 +39,7 @@ class ModelConfig(object):
 
         self.input_chnum   = 3
         self.output_chnum  = 14 # number of keypoints
-        self.channel_num   = 32
+        self.channel_num   = 64
 
         self.dtype = tf.float32
 
@@ -105,9 +104,9 @@ class HourglassConfig(object):
     def __init__(self):
         self.updown_rate            = 2
         self.maxpool_kernel_size    =[3,3]
-        self.num_stage              = 4
-        self.center_conv_num        = 3
-        self.skip_conv_num          = 4
+        self.num_stage              = 2
+        self.center_conv_num        = 1
+        self.skip_conv_num          = 1
         self.center_ch_num          = 32 #output channel num
 
 
@@ -117,7 +116,7 @@ class HourglassConfig(object):
 class OutputConfig(object):
 
     def __init__(self):
-        self.dropout_keeprate       = 0.8
+        self.dropout_keeprate       = 1
         self.weights_initializer    = tf.contrib.layers.xavier_initializer()
         self.weights_regularizer    = tf.contrib.layers.l2_regularizer(4E-5)
         self.biases_initializer     = slim.init_ops.zeros_initializer()
@@ -141,7 +140,7 @@ class SeparableConfig(object):
         self.weights_initializer    = tf.contrib.layers.xavier_initializer()
         self.biases_initializer     = slim.init_ops.zeros_initializer()
         self.weights_regularizer    = tf.contrib.layers.l2_regularizer(4E-5)
-
+        self.invbottle_expansion_rate   = 7.0
 
         self.normalizer_fn          = slim.batch_norm
         self.is_trainable           = True

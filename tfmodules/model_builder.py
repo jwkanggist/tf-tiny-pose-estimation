@@ -20,7 +20,7 @@ from __future__ import print_function
 
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
-
+import numpy as np
 
 class ModelBuilder(object):
 
@@ -70,30 +70,35 @@ class ModelBuilder(object):
                             scope='recept'):
 
         with tf.variable_scope(name_or_scope=scope,values=[ch_in]):
-            net = slim.conv2d(inputs                =ch_in,
-                              num_outputs           =num_outputs,
-                              kernel_size           =model_config.kernel_shape['r1'],
-                              stride                =model_config.strides['r1'],
-                              weights_initializer   =model_config.weights_initializer,
-                              weights_regularizer   =model_config.weights_regularizer,
-                              biases_initializer    =model_config.biases_initializer,
-                              normalizer_fn         =None,
-                              activation_fn         =None,
-                              padding               ='SAME',
-                              trainable             =model_config.is_trainable,
-                              scope                 ='7x7conv')
+            with slim.arg_scope([model_config.normalizer_fn],
+                                decay=model_config.batch_norm_decay,
+                                fused=model_config.batch_norm_fused,
+                                is_training=model_config.is_trainable,
+                                activation_fn=model_config.activation_fn):
 
-            net = slim.batch_norm(  inputs= net,
-                                    decay       =model_config.batch_norm_decay,
-                                    fused       =model_config.batch_norm_fused,
-                                    is_training =model_config.is_trainable,
-                                    activation_fn=model_config.activation_fn,
-                                    scope       ='batch_norm_7x7conv')
+                net = slim.conv2d(inputs                =ch_in,
+                                  num_outputs           =num_outputs,
+                                  kernel_size           =model_config.kernel_shape['r1'],
+                                  stride                =model_config.strides['r1'],
+                                  weights_initializer   =model_config.weights_initializer,
+                                  weights_regularizer   =model_config.weights_regularizer,
+                                  biases_initializer    =model_config.biases_initializer,
+                                  normalizer_fn         =model_config.normalizer_fn,
+                                  activation_fn         =None,
+                                  padding               ='SAME',
+                                  scope                 ='7x7conv')
+
+            # net = slim.batch_norm(  inputs= net,
+            #                         decay       =model_config.batch_norm_decay,
+            #                         fused       =model_config.batch_norm_fused,
+            #                         is_training =model_config.is_trainable,
+            #                         activation_fn=model_config.activation_fn,
+            #                         scope       ='batch_norm_7x7conv')
 
             net = self._get_inverted_bottleneck(ch_in          =net,
-                                            ch_out_num      =num_outputs,
-                                            model_config    =model_config_separable_conv,
-                                            scope='inverted_bottleneck')
+                                                ch_out_num      =num_outputs,
+                                                model_config    =model_config_separable_conv,
+                                                scope='inverted_bottleneck')
 
             net = slim.max_pool2d(inputs=net,
                                   kernel_size   =model_config.kernel_shape['r4'],
@@ -326,7 +331,8 @@ class ModelBuilder(object):
         stride       = model_config.stride_dwise
 
         # number of input channel
-        ch_in_num = ch_in.get_shape().as_list()[3]
+        ch_in_num       = ch_in.get_shape().as_list()[3]
+        expand_ch_num   = np.floor(ch_in_num * model_config.invbottle_expansion_rate)
         with tf.variable_scope(name_or_scope=scope, default_name='inverted_bottleneck', values=[ch_in]) as sc:
 
             with slim.arg_scope([slim.conv2d],
@@ -335,7 +341,7 @@ class ModelBuilder(object):
                                 padding='SAME',
                                 activation_fn=None,
                                 weights_initializer=model_config.weights_initializer,
-                                weights_regularizer=model_config.weights_regularizer,
+                                weights_regularizer=None,
                                 trainable=model_config.is_trainable):
 
                 with slim.arg_scope([model_config.normalizer_fn],
@@ -348,7 +354,7 @@ class ModelBuilder(object):
                     # followed by batch_norm and relu6
 
                     net = slim.conv2d(inputs=net,
-                                      num_outputs=7*ch_in_num,
+                                      num_outputs=expand_ch_num,
                                       normalizer_fn=model_config.normalizer_fn,
                                       biases_initializer=None,
                                       scope=scope + '_bottleneck')

@@ -35,7 +35,7 @@ class TrainConfig(object):
         self.learning_rate_decay_rate   = 0.95
         self.opt_fn                     = tf.train.AdamOptimizer
         self.loss_fn                    = tf.nn.l2_loss
-        self.batch_size                 = 32
+        self.batch_size                 = 8
         self.shuffle_size               = 1024
         # self.prefetch_size              = 1024
         self.metric_fn                  = tf.metrics.root_mean_squared_error
@@ -49,7 +49,7 @@ class TrainConfig(object):
         self.valid_data_size      = 1500
         self.eval_data_size       = 1500
 
-        self.total_steps = int(float(self.train_data_size/self.batch_size) * 40.0)
+        self.total_steps = int(float(self.train_data_size/self.batch_size) * 20.0)
         self.multiprocessing_num = 4
         self.random_seed         = 66478
 
