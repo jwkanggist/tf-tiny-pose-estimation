@@ -30,7 +30,7 @@ class ModelConfig(object):
     def __init__(self,setuplog_dir):
 
         self.reception = RecepConfig()
-        self.hourglass = HourglassConfig()
+        self.hourglass = HourglassConfig(channel_num=self.channel_num)
         self.output    = OutputConfig()
         self.separable_conv = SeparableConfig()
 
@@ -101,13 +101,13 @@ class RecepConfig(object):
 
 class HourglassConfig(object):
 
-    def __init__(self):
+    def __init__(self,channel_num):
         self.updown_rate            = 2
         self.maxpool_kernel_size    =[3,3]
         self.num_stage              = 2
         self.center_conv_num        = 1
         self.skip_conv_num          = 1
-        self.center_ch_num          = 32 #output channel num
+        self.center_ch_num          = channel_num #output channel num
 
 
 
