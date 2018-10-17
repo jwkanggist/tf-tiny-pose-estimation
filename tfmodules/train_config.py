@@ -35,7 +35,7 @@ class TrainConfig(object):
         self.learning_rate_decay_rate   = 0.95
         self.opt_fn                     = tf.train.AdamOptimizer
         self.loss_fn                    = tf.nn.l2_loss
-        self.batch_size                 = 16
+        self.batch_size                 = 32
         self.shuffle_size               = 1024
         # self.prefetch_size              = 1024
         self.metric_fn                  = tf.metrics.root_mean_squared_error
@@ -110,7 +110,7 @@ class PreprocessingConfig(object):
         # self.is_label_coordinate_norm   = False
 
         # for ground true heatmap generation
-        self.heatmap_std        = 10.0
+        self.heatmap_std        = 3.0
 
         self.MIN_AUGMENT_ROTATE_ANGLE_DEG = -15.0
         self.MAX_AUGMENT_ROTATE_ANGLE_DEG = 15.0

@@ -26,7 +26,6 @@ class ModelBuilder(object):
 
     def __init__(self,model_config):
         self._model_config = model_config
-
         self.dropout_keeprate = tf.placeholder(dtype=tf.float32)
 
 
@@ -95,7 +94,7 @@ class ModelBuilder(object):
             #                         activation_fn=model_config.activation_fn,
             #                         scope       ='batch_norm_7x7conv')
 
-            net = self._get_inverted_bottleneck(ch_in          =net,
+            net = self._get_inverted_bottleneck(ch_in           =net,
                                                 ch_out_num      =num_outputs,
                                                 model_config    =model_config_separable_conv,
                                                 scope='inverted_bottleneck')
@@ -128,7 +127,7 @@ class ModelBuilder(object):
                               weights_regularizer   =model_config.weights_regularizer,
                               normalizer_fn         =None,
                               activation_fn         =None,
-                              padding='SAME',
+                              padding               ='SAME',
                               trainable             =model_config.is_trainable,
                               scope='1x1conv')
 
@@ -176,7 +175,7 @@ class ModelBuilder(object):
 
             # add skip connection
             net = center
-            hourglass_output_stack = []
+            # hourglass_output_stack = []
             for up_index in range(0,model_config.num_stage):
 
                 skip_connection = downsample_out_stack.pop()

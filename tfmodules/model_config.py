@@ -81,7 +81,7 @@ class RecepConfig(object):
 
         self.weights_initializer    = tf.contrib.layers.xavier_initializer()
         self.biases_initializer     = None
-        self.weights_regularizer    = tf.contrib.layers.l2_regularizer(4E-5)
+        self.weights_regularizer    = None
 
         self.activation_fn          = tf.nn.relu
         self.normalizer_fn          = slim.batch_norm
@@ -107,8 +107,8 @@ class HourglassConfig(object):
         self.updown_rate            = 2
         self.maxpool_kernel_size    =[3,3]
         self.num_stage              = 4
-        self.center_conv_num        = 1
-        self.skip_conv_num          = 4
+        self.center_conv_num        = 3
+        self.skip_conv_num          = 1
         self.center_ch_num          = channel_num #output channel num
 
 
@@ -123,9 +123,9 @@ class OutputConfig(object):
         self.batch_norm_decay   =  0.999
         self.batch_norm_fused   =  True
 
-        self.dropout_keeprate       = 1.0
+        self.dropout_keeprate       = 0.8
         self.weights_initializer    = tf.contrib.layers.xavier_initializer()
-        self.weights_regularizer    = None
+        self.weights_regularizer    = tf.contrib.layers.l2_regularizer(4E-5)
         self.biases_initializer     = None
         self.activation_fn          = None
         self.is_trainable           = True
