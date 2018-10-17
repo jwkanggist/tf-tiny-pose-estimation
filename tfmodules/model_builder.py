@@ -126,7 +126,6 @@ class ModelBuilder(object):
                               stride                =model_config.stride,
                               weights_initializer   =model_config.weights_initializer,
                               weights_regularizer   =model_config.weights_regularizer,
-                              biases_initializer    =model_config.biases_initializer,
                               normalizer_fn         =None,
                               activation_fn         =None,
                               padding='SAME',
@@ -137,12 +136,12 @@ class ModelBuilder(object):
                 out = slim.dropout(inputs= out,
                                    keep_prob=self.dropout_keeprate)
 
-            out = slim.batch_norm(  inputs= out,
-                                    decay       =model_config.batch_norm_decay,
-                                    fused       =model_config.batch_norm_fused,
-                                    is_training =model_config.is_trainable,
-                                    activation_fn=model_config.activation_fn,
-                                    scope       ='batch_norm_outlayer')
+            out = model_config.normalizer_fn(  inputs= out,
+                                                decay       =model_config.batch_norm_decay,
+                                                fused       =model_config.batch_norm_fused,
+                                                is_training =model_config.is_trainable,
+                                                activation_fn=model_config.activation_fn,
+                                                scope       ='batch_norm_outlayer')
 
 
         return out
