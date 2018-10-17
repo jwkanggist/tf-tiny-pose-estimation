@@ -61,6 +61,7 @@ def train(dataset_train, dataset_valid,train_config,model_config):
 
     # traning ops =============================================
     loss_heatmap_op        = train_config.loss_fn( (true_heatmap - pred_heatmap)  / train_config.batch_size )
+
     loss_heatmap_resized_op = []
     for stage_index in range(model_config.hourglass.num_stage):
         loss_heatmap_resized_op.append(train_config.loss_fn((true_heatmap - pred_heatmap_resized[stage_index]) \

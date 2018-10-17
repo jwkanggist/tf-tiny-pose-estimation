@@ -105,7 +105,7 @@ class HourglassConfig(object):
         self.updown_rate            = 2
         self.maxpool_kernel_size    =[3,3]
         self.num_stage              = 4
-        self.center_conv_num        = 3
+        self.center_conv_num        = 1
         self.skip_conv_num          = 4
         self.center_ch_num          = 14 #output channel num
 
@@ -121,7 +121,7 @@ class OutputConfig(object):
         self.batch_norm_decay   =  0.999
         self.batch_norm_fused   =  True
 
-        self.dropout_keeprate       = 1.0
+        self.dropout_keeprate       = 0.8
         self.weights_initializer    = tf.contrib.layers.xavier_initializer()
         self.weights_regularizer    = tf.contrib.layers.l2_regularizer(4E-5)
         self.biases_initializer     = None
