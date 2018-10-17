@@ -39,12 +39,13 @@ class ModelBuilder(object):
                                                    model_config                 =self._model_config.reception,
                                                    model_config_separable_conv  =self._model_config.separable_conv,
                                                    scope                        ='reception')
-
+            # -----------------------------------------------------
             # hg_out,hg_out_stack = self._get_hourglass_layer(ch_in                       =recept_out,
             #                                                 model_config                 =self._model_config.hourglass,
             #                                                 model_config_separable_conv  =self._model_config.separable_conv,
             #                                                 scope                        ='hourglass')
             #
+            # -----------------------------------------------------
 
             with tf.variable_scope(name_or_scope='hg_layer',values=[recept_out]):
                 hg_out = self._get_hourglass_layer( ch_in                       =recept_out,
