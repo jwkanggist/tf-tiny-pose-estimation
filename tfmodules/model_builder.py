@@ -40,21 +40,22 @@ class ModelBuilder(object):
                                                    model_config_separable_conv  =self._model_config.separable_conv,
                                                    scope                        ='reception')
 
-            with tf.name_scope(name='hg_layer',values=[recept_out]):
-                hg_out = self._get_hourglass_layer(ch_in                       =recept_out,
-                                                   model_config                 =self._model_config.hourglass,
-                                                   model_config_separable_conv  =self._model_config.separable_conv,
-                                                   scope                        ='hourglass')
+            hg_out,hg_out_stack = self._get_hourglass_layer(ch_in                       =recept_out,
+                                                            model_config                 =self._model_config.hourglass,
+                                                            model_config_separable_conv  =self._model_config.separable_conv,
+                                                            scope                        ='hourglass')
 
-                output_in = tf.add(hg_out,recept_out,'skip_hourglass')
 
-            model_out = self._get_output_layer(ch_in                    =output_in,
+            model_out = self._get_output_layer(ch_in                    =hg_out,
                                                num_outputs              =self._model_config.output_chnum,
                                                model_config             =self._model_config.output,
                                                scope                    ='output')
+
         tf.logging.info('[ModelBuilder] model building complete')
         tf.logging.info('[ModelBuilder] model output shape = %s'%model_out.shape)
-        return model_out
+
+
+        return model_out,hg_out_stack
 
 
 
@@ -87,12 +88,6 @@ class ModelBuilder(object):
                                   padding               ='SAME',
                                   scope                 ='7x7conv')
 
-            # net = slim.batch_norm(  inputs= net,
-            #                         decay       =model_config.batch_norm_decay,
-            #                         fused       =model_config.batch_norm_fused,
-            #                         is_training =model_config.is_trainable,
-            #                         activation_fn=model_config.activation_fn,
-            #                         scope       ='batch_norm_7x7conv')
 
             net = self._get_inverted_bottleneck(ch_in           =net,
                                                 ch_out_num      =num_outputs,
@@ -155,7 +150,10 @@ class ModelBuilder(object):
                             model_config_separable_conv,
                             scope='hourglass'):
 
-        ch_in_num = ch_in.get_shape().as_list()[3]
+        input_shape     = ch_in.get_shape().as_list()
+        ch_in_num       = input_shape[3]
+        output_shape    = [input_shape[1],input_shape[2]]
+
         with tf.variable_scope(name_or_scope=scope,values=[ch_in]):
 
             downsample_out_stack = []
@@ -175,7 +173,7 @@ class ModelBuilder(object):
 
             # add skip connection
             net = center
-            # hourglass_output_stack = []
+            hourglass_output_stack = []
             for up_index in range(0,model_config.num_stage):
 
                 skip_connection = downsample_out_stack.pop()
@@ -183,9 +181,17 @@ class ModelBuilder(object):
                                               ch_out_num=model_config.center_ch_num,
                                               model_config=model_config_separable_conv,
                                               scope='invbo_skip_'+str(up_index))
+
+
                 net = tf.add(x=net, y=skip_connection)
                 #---------------------------------#
-                # hourglass_output_stack.append(net)
+                with tf.variable_scope(name_or_scope='resized_hgout',values=[net]):
+                    resized_net = tf.image.resize_bilinear(images = net,
+                                                           size = output_shape,
+                                                           align_corners=False,
+                                                           name=        'resize_for_extra_loss')
+
+                    hourglass_output_stack.append(resized_net)
                 #---------------------------------#
 
                 net = self.upsample_hourglass(ch_in                         =net,
@@ -194,10 +200,15 @@ class ModelBuilder(object):
                                               scope                         ='upsample_'+str(up_index))
                 ## -------------------------------------
 
-            # resize and concat
+            with tf.variable_scope(name_or_scope='skip_connect_io',values=[ch_in]):
+                skip_connection = slim.repeat(ch_in,model_config.skip_conv_num,self._get_inverted_bottleneck,
+                                              ch_out_num=model_config.center_ch_num,
+                                              model_config=model_config_separable_conv,
+                                              scope='skip_connect_io')
+                net = tf.add(skip_connection,net)
 
 
-        return net
+        return net, hourglass_output_stack
 
 
     # def _get_dense_hourglass_layer(self,ch_in,

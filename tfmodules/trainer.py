@@ -56,13 +56,19 @@ def train(dataset_train, dataset_valid,train_config,model_config):
 
     # model building =========================
     modelbuilder = ModelBuilder(model_config=model_config)
-    pred_heatmap = modelbuilder.get_model(model_in=inputs,
-                                          scope='model')
+    pred_heatmap,pred_heatmap_resized = modelbuilder.get_model(model_in=inputs,
+                                                                scope='model')
 
     # traning ops =============================================
     loss_heatmap_op        = train_config.loss_fn( (true_heatmap - pred_heatmap)  / train_config.batch_size )
+    loss_heatmap_resized_op = []
+    for stage_index in range(model_config.hourglass.num_stage):
+        loss_heatmap_resized_op.append(train_config.loss_fn((true_heatmap - pred_heatmap_resized[stage_index]) \
+                                                        /train_config.batch_size ))
+
+
     loss_regularizer_op    = tf.losses.get_regularization_loss()
-    loss_op                = loss_heatmap_op + loss_regularizer_op
+    loss_op                = loss_heatmap_op + sum(loss_heatmap_resized_op) + loss_regularizer_op
 
     global_step = tf.Variable(0, trainable=False)
     batchnum_per_epoch  = np.floor(train_config.train_data_size / train_config.batch_size)
