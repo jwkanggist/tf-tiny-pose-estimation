@@ -133,7 +133,7 @@ class ModelBuilder(object):
                               trainable             =model_config.is_trainable,
                               scope='1x1conv')
 
-            if self.dropout_keeprate < 1.0:
+            if model_config.dropout_keeprate < 1.0:
                 out = slim.dropout(inputs= out,
                                    keep_prob=self.dropout_keeprate)
 
