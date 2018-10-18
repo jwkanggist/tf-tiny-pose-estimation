@@ -124,8 +124,9 @@ class OutputConfig(object):
 
         self.dropout_keeprate       = 1.0
         self.weights_initializer    = tf.contrib.layers.xavier_initializer()
-        self.weights_regularizer    = tf.contrib.layers.l2_regularizer(4E-5)
+        # self.weights_regularizer    = tf.contrib.layers.l2_regularizer(4E-5)
         self.biases_initializer     = slim.init_ops.zeros_initializer()
+        self.weights_regularizer    = None
         self.activation_fn          = None
         self.is_trainable           = True
         self.normalizer_fn          = slim.batch_norm
