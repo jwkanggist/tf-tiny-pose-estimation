@@ -34,13 +34,13 @@ class ModelBuilder(object):
     def get_model(self, model_in,scope):
 
         with tf.variable_scope(name_or_scope=scope, values=[model_in]):
-            recept_out = self._get_reception_layer(ch_in                       =model_in,
+            recept_out = self._get_reception_layer(ch_in                        =model_in,
                                                    num_outputs                  =self._model_config.channel_num,
                                                    model_config                 =self._model_config.reception,
                                                    model_config_separable_conv  =self._model_config.separable_conv,
                                                    scope                        ='reception')
             # -----------------------------------------------------
-            hg_out,hg_out_stack = self._get_hourglass_layer(ch_in                       =recept_out,
+            hg_out,hg_out_stack = self._get_hourglass_layer(ch_in                        =recept_out,
                                                             model_config                 =self._model_config.hourglass,
                                                             model_config_separable_conv  =self._model_config.separable_conv,
                                                             scope                        ='hourglass')
@@ -215,7 +215,7 @@ class ModelBuilder(object):
                                               ch_out_num=model_config.center_ch_num,
                                               model_config=model_config_separable_conv,
                                               scope='skip_connect_io')
-                net = tf.add(skip_connection,net)
+                net = tf.add(net,skip_connection)
             ## -------------------------------------
 
 
@@ -362,16 +362,16 @@ class ModelBuilder(object):
         # number of input channel
         ch_in_num       = ch_in.get_shape().as_list()[3]
         expand_ch_num   = np.floor(ch_in_num * model_config.invbottle_expansion_rate)
-        with tf.variable_scope(name_or_scope=scope, default_name='inverted_bottleneck', values=[ch_in]) as sc:
+        with tf.variable_scope(name_or_scope=scope, default_name='inverted_bottleneck', values=[ch_in]):
 
             with slim.arg_scope([slim.conv2d],
-                                kernel_size=[1, 1],
-                                stride=[1, 1],
-                                padding='SAME',
-                                activation_fn=None,
-                                weights_initializer=model_config.weights_initializer,
-                                weights_regularizer=None,
-                                trainable=model_config.is_trainable):
+                                kernel_size         =[1, 1],
+                                stride              =[1, 1],
+                                padding             ='SAME',
+                                activation_fn       =None,
+                                weights_initializer =model_config.weights_initializer,
+                                weights_regularizer =None,
+                                trainable           =model_config.is_trainable):
 
                 with slim.arg_scope([model_config.normalizer_fn],
                                     decay=model_config.batch_norm_decay,
@@ -380,7 +380,7 @@ class ModelBuilder(object):
                                     activation_fn=model_config.activation_fn_pwise):
 
                     # linear bottleneck by conv 1x1
-                    # followed by batch_norm and relu6
+                    # followed by batch_norm and relu
 
                     net = slim.conv2d(inputs=net,
                                       num_outputs=expand_ch_num,

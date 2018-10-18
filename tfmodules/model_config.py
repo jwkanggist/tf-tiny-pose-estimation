@@ -36,9 +36,9 @@ class ModelConfig(object):
         self.output_chnum  = 14 # number of keypoints
         self.channel_num   = 32
 
-        self.reception = RecepConfig()
-        self.hourglass = HourglassConfig(channel_num=self.channel_num)
-        self.output    = OutputConfig()
+        self.reception      = RecepConfig()
+        self.hourglass      = HourglassConfig(channel_num=self.channel_num)
+        self.output         = OutputConfig()
         self.separable_conv = SeparableConfig()
 
         self.dtype = tf.float32
@@ -78,7 +78,7 @@ class RecepConfig(object):
         self.batch_norm_fused   =  True
 
         self.weights_initializer    = tf.contrib.layers.xavier_initializer()
-        self.biases_initializer     = None
+        self.biases_initializer     = slim.init_ops.zeros_initializer()
         self.weights_regularizer    = None
 
         self.activation_fn          = tf.nn.relu
@@ -122,10 +122,10 @@ class OutputConfig(object):
         self.batch_norm_decay   =  0.999
         self.batch_norm_fused   =  True
 
-        self.dropout_keeprate       = 0.8
+        self.dropout_keeprate       = 1.0
         self.weights_initializer    = tf.contrib.layers.xavier_initializer()
         self.weights_regularizer    = tf.contrib.layers.l2_regularizer(4E-5)
-        self.biases_initializer     = None
+        self.biases_initializer     = slim.init_ops.zeros_initializer()
         self.activation_fn          = None
         self.is_trainable           = True
         self.normalizer_fn          = slim.batch_norm
@@ -145,7 +145,7 @@ class SeparableConfig(object):
         self.batch_norm_fused   =  True
 
         self.weights_initializer    = tf.contrib.layers.xavier_initializer()
-        self.biases_initializer     = None
+        self.biases_initializer     = slim.init_ops.zeros_initializer()
         self.weights_regularizer    = None
         self.invbottle_expansion_rate   = 7.0
 
