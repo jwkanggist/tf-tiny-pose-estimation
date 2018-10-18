@@ -195,13 +195,13 @@ class ModelBuilder(object):
 
                 net = tf.add(x=net, y=skip_connection)
                 #---------------------------------#
-                with tf.variable_scope(name_or_scope='resized_hgout',values=[net]):
-                    resized_net = tf.image.resize_bilinear(images = net,
-                                                           size = output_shape,
-                                                           align_corners=False,
-                                                           name=        'resize_for_extra_loss')
-
-                    hourglass_output_stack.append(resized_net)
+                # with tf.variable_scope(name_or_scope='resized_hgout',values=[net]):
+                #     resized_net = tf.image.resize_bilinear(images = net,
+                #                                            size = output_shape,
+                #                                            align_corners=False,
+                #                                            name=        'resize_for_extra_loss')
+                #
+                #     hourglass_output_stack.append(resized_net)
                 #---------------------------------#
 
                 net = self.upsample_hourglass(ch_in                         =net,
