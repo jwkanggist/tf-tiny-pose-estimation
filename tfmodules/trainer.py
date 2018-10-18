@@ -70,8 +70,8 @@ def train(dataset_train, dataset_valid,train_config,model_config):
     # -----------------------------------------------------
     loss_heatmap_resized_op = []
     for stage_index in range(model_config.hourglass.num_stage):
-        loss_heatmap_resized_op.append(train_config.loss_fn((true_heatmap - pred_heatmap_resized[stage_index]) \
-                                                        /train_config.batch_size ))
+        loss_heatmap_resized_op.append(tf.losses.mean_squared_error(labels=true_heatmap,
+                                                                    predictions=pred_heatmap_resized[stage_index]))
     # -----------------------------------------------------
 
     loss_regularizer_op    = tf.losses.get_regularization_loss()
