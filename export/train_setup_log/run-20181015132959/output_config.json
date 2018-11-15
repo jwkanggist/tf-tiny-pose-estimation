@@ -1,0 +1,1 @@
+"{'stride': 1, 'dropout_keeprate': 0.8, 'weights_regularizer': <function l2 at 0x11cd3f398>, 'activation_fn': None, 'kernel_shape': [1, 1], 'biases_initializer': <tensorflow.python.ops.init_ops.Zeros object at 0x11cd2fd90>, 'weights_initializer': <function _initializer at 0x11cd3f320>, 'is_trainable': True}"

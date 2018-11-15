@@ -1,0 +1,816 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="9b173aec-9554-487d-a57e-8af5300ce59b" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/tfmodules/model_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/tfmodules/model_config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tfmodules/path_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/tfmodules/path_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tfmodules/train_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/tfmodules/train_config.py" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/tf_tiny_pose_estimation$utils.coverage" NAME="utils Coverage Results" MODIFIED="1539301668397" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tfmodules" />
+    <SUITE FILE_PATH="coverage/tf_tiny_pose_estimation$data_loader.coverage" NAME="data_loader Coverage Results" MODIFIED="1539322508272" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tfmodules" />
+    <SUITE FILE_PATH="coverage/tf_tiny_pose_estimation$trainer__1_.coverage" NAME="trainer (1) Coverage Results" MODIFIED="1539280011583" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tfmodules" />
+    <SUITE FILE_PATH="coverage/tf_tiny_pose_estimation$Unittests_in_test_dataloader_py.coverage" NAME="Unittests in test_dataloader.py Coverage Results" MODIFIED="1539610528488" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tfmodules/coco_dataload_modules/testcodes" />
+    <SUITE FILE_PATH="coverage/tf_tiny_pose_estimation$trainer.coverage" NAME="trainer Coverage Results" MODIFIED="1539885883387" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tfmodules" />
+    <SUITE FILE_PATH="coverage/tf_tiny_pose_estimation$train_config.coverage" NAME="train_config Coverage Results" MODIFIED="1539696234961" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tfmodules" />
+    <SUITE FILE_PATH="coverage/tf_tiny_pose_estimation$Unittests_for_test_dataloader_DataLoaderTest_test_data_loader_coco.coverage" NAME="Unittests for test_dataloader.DataLoaderTest.test_data_loader_coco Coverage Results" MODIFIED="1539669342336" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tfmodules/coco_dataload_modules/testcodes" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="model_config.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tfmodules/model_config.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="684">
+              <caret line="36" column="31" selection-start-line="36" selection-start-column="31" selection-end-line="36" selection-end-column="31" />
+              <folding>
+                <element signature="e#645#683#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="FIRST">
+              <first_editor relative-caret-position="2242">
+                <caret line="118" selection-start-line="118" selection-end-line="118" />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="data_loader.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tfmodules/data_loader.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="228">
+              <caret line="12" column="3" selection-start-line="12" selection-start-column="3" selection-end-line="12" selection-end-column="3" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="trainer.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/tfmodules/trainer.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="129">
+              <caret line="114" selection-start-line="114" selection-end-line="114" />
+              <folding>
+                <element signature="e#706#744#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="train_config.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tfmodules/train_config.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="703">
+              <caret line="37" column="43" selection-start-line="37" selection-start-column="43" selection-end-line="37" selection-end-column="43" />
+              <folding>
+                <element signature="e#645#683#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="utils.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tfmodules/utils.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="5415">
+              <caret line="285" column="64" selection-start-line="285" selection-start-column="51" selection-end-line="285" selection-end-column="64" />
+              <folding>
+                <element signature="e#645#683#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="model_builder.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tfmodules/model_builder.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3724">
+              <caret line="196" column="62" selection-start-line="196" selection-start-column="34" selection-end-line="196" selection-end-column="62" />
+              <folding>
+                <element signature="e#645#683#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dataset_augment.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tfmodules/coco_dataload_modules/dataset_augment.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="5472">
+              <caret line="298" column="37" selection-start-line="298" selection-start-column="37" selection-end-line="298" selection-end-column="37" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dataset_prepare.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tfmodules/coco_dataload_modules/dataset_prepare.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2318">
+              <caret line="125" column="17" selection-start-line="125" selection-start-column="10" selection-end-line="125" selection-end-column="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>_get_separable_conv2d</find>
+      <find>train_data_size</find>
+      <find>test_data_size</find>
+      <find>epoch</find>
+      <find>COCO</find>
+      <find>TRAIN_ANNO</find>
+      <find>metric</find>
+      <find>kee</find>
+      <find>train_epoch</find>
+      <find>training_epochs</find>
+      <find>rwrist</find>
+      <find>errdist_relbow</find>
+      <find>RElbow</find>
+      <find>conv2d</find>
+      <find>get_inverted_bottleneck</find>
+      <find>update_op_head_neck_dist</find>
+      <find>normalizer</find>
+      <find>regularizer</find>
+      <find>hourglass_output_stack</find>
+      <find>_get_output_layer</find>
+      <find>skip_conv</find>
+      <find>self</find>
+      <find>_get</find>
+      <find>net_ch_num</find>
+      <find>pred_heatmap_resized</find>
+      <find>train_config</find>
+      <find>learning_rate</find>
+      <find>pred_heatmap</find>
+      <find>biases_initializer</find>
+      <find>file_writer_train</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>_get_reception_layer</replace>
+      <replace>_get_hourglass_layer</replace>
+      <replace>_get_output_layer</replace>
+      <replace>_get_separable_conv2d</replace>
+      <replace>DATASET_DIR</replace>
+      <replace>global_step_eval</replace>
+      <replace>true_heatmap_test_op</replace>
+      <replace>inputs_test_op</replace>
+      <replace>valid</replace>
+      <replace>self.train_config</replace>
+      <replace>self.model_config</replace>
+      <replace>self.preproc_config</replace>
+      <replace>knee</replace>
+      <replace>_get_inverted_bottleneck</replace>
+      <replace>get</replace>
+    </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/tfmodule/eval.py" />
+        <option value="$PROJECT_DIR$/tfmodule/utils.py" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/tfmodule/coco_dataload_modules/dataset_augment.py" />
+        <option value="$PROJECT_DIR$/tfmodule/coco_dataload_modules/dataset_prepare.py" />
+        <option value="$PROJECT_DIR$/tfmodule/model_config.py" />
+        <option value="$PROJECT_DIR$/tfmodule/model_builder.py" />
+        <option value="$PROJECT_DIR$/tfmodule/train_config.py" />
+        <option value="$PROJECT_DIR$/tfmodule/data_loader.py" />
+        <option value="$PROJECT_DIR$/tfmodule/trainer.py" />
+        <option value="$PROJECT_DIR$/tfmodule/path_manager.py" />
+        <option value="$USER_HOME$/.pyenv/versions/tensorflow-anaconda2/lib/python2.7/site-packages/pycocotools/coco.py" />
+        <option value="$PROJECT_DIR$/tfmodules/eval.py" />
+        <option value="$PROJECT_DIR$/tfmodules/evaluater.py" />
+        <option value="$PROJECT_DIR$/tfmodules/utils.py" />
+        <option value="$PROJECT_DIR$/tfmodules/data_loader.py" />
+        <option value="$PROJECT_DIR$/tfmodules/coco_dataload_modules/testcodes/test_dataloader.py" />
+        <option value="$PROJECT_DIR$/tfmodules/coco_dataload_modules/dataset_augment.py" />
+        <option value="$PROJECT_DIR$/tfmodules/testcodes/test_model_builder.py" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/tfmodules/path_manager.py" />
+        <option value="$PROJECT_DIR$/tfmodules/trainer.py" />
+        <option value="$PROJECT_DIR$/tfmodules/conv_modules.py" />
+        <option value="$PROJECT_DIR$/tfmodules/model_builder.py" />
+        <option value="$PROJECT_DIR$/tfmodules/model_config.py" />
+        <option value="$PROJECT_DIR$/tfmodules/train_config.py" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="NodePackageJsonFileManager">
+    <packageJsonPaths />
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="33" />
+    <option name="y" value="23" />
+    <option name="width" value="1247" />
+    <option name="height" value="777" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="tf-tiny-pose-estimation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tf-tiny-pose-estimation" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tf-tiny-pose-estimation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tf-tiny-pose-estimation" type="462c0819:PsiDirectoryNode" />
+              <item name="dataset" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tf-tiny-pose-estimation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tf-tiny-pose-estimation" type="462c0819:PsiDirectoryNode" />
+              <item name="tfmodules" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tf-tiny-pose-estimation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tf-tiny-pose-estimation" type="462c0819:PsiDirectoryNode" />
+              <item name="tfmodules" type="462c0819:PsiDirectoryNode" />
+              <item name="coco_dataload_modules" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tf-tiny-pose-estimation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tf-tiny-pose-estimation" type="462c0819:PsiDirectoryNode" />
+              <item name="tfmodules" type="462c0819:PsiDirectoryNode" />
+              <item name="coco_dataload_modules" type="462c0819:PsiDirectoryNode" />
+              <item name="testcodes" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ToolWindowSciView.ShowToolbar" value="false" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Python.trainer">
+    <configuration name="data_loader" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="tf-tiny-pose-estimation" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tfmodules" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tfmodules/data_loader.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="train_config" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="tf-tiny-pose-estimation" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tfmodules" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tfmodules/train_config.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="trainer" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="tf-tiny-pose-estimation" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tfmodules" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tfmodules/trainer.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="Unittests for test_dataloader.DataLoaderTest.test_data_loader_coco" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="tf-tiny-pose-estimation" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tfmodules/coco_dataload_modules/testcodes" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_dataloader.DataLoaderTest.test_data_loader_coco&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+    </configuration>
+    <configuration name="Unittests in test_dataloader.py" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="tf-tiny-pose-estimation" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tfmodules/coco_dataload_modules/testcodes" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tfmodules/coco_dataload_modules/testcodes/test_dataloader.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.trainer" />
+      <item itemvalue="Python tests.Unittests for test_dataloader.DataLoaderTest.test_data_loader_coco" />
+      <item itemvalue="Python.data_loader" />
+      <item itemvalue="Python.train_config" />
+      <item itemvalue="Python tests.Unittests in test_dataloader.py" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.trainer" />
+        <item itemvalue="Python.train_config" />
+        <item itemvalue="Python tests.Unittests for test_dataloader.DataLoaderTest.test_data_loader_coco" />
+        <item itemvalue="Python tests.Unittests in test_dataloader.py" />
+        <item itemvalue="Python.data_loader" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9b173aec-9554-487d-a57e-8af5300ce59b" name="Default" comment="" />
+      <created>1538875707667</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1538875707667</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="Unittests_for_test_dataloader_DataLoaderTest_test_data_loader_coco - 2018.10.16 at 14h 24m 11s.xml">
+      <configuration name="Unittests for test_dataloader.DataLoaderTest.test_data_loader_coco" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_test_dataloader_DataLoaderTest_test_data_loader_coco - 2018.10.16 at 14h 26m 10s.xml">
+      <configuration name="Unittests for test_dataloader.DataLoaderTest.test_data_loader_coco" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_test_dataloader_DataLoaderTest_test_data_loader_coco - 2018.10.16 at 14h 26m 36s.xml">
+      <configuration name="Unittests for test_dataloader.DataLoaderTest.test_data_loader_coco" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_test_dataloader_DataLoaderTest_test_data_loader_coco - 2018.10.16 at 14h 29m 26s.xml">
+      <configuration name="Unittests for test_dataloader.DataLoaderTest.test_data_loader_coco" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_test_dataloader_DataLoaderTest_test_data_loader_coco - 2018.10.16 at 14h 30m 07s.xml">
+      <configuration name="Unittests for test_dataloader.DataLoaderTest.test_data_loader_coco" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_test_dataloader_DataLoaderTest_test_data_loader_coco - 2018.10.16 at 14h 33m 46s.xml">
+      <configuration name="Unittests for test_dataloader.DataLoaderTest.test_data_loader_coco" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_test_dataloader_DataLoaderTest_test_data_loader_coco - 2018.10.16 at 14h 39m 28s.xml">
+      <configuration name="Unittests for test_dataloader.DataLoaderTest.test_data_loader_coco" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_test_dataloader_DataLoaderTest_test_data_loader_coco - 2018.10.16 at 14h 43m 38s.xml">
+      <configuration name="Unittests for test_dataloader.DataLoaderTest.test_data_loader_coco" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_test_dataloader_DataLoaderTest_test_data_loader_coco - 2018.10.16 at 14h 51m 13s.xml">
+      <configuration name="Unittests for test_dataloader.DataLoaderTest.test_data_loader_coco" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_test_dataloader_DataLoaderTest_test_data_loader_coco - 2018.10.16 at 14h 56m 18s.xml">
+      <configuration name="Unittests for test_dataloader.DataLoaderTest.test_data_loader_coco" configurationId="tests" />
+    </history-entry>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="30" y="23" width="1250" height="777" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.5007215" side_tool="true" weight="0.53109455" />
+      <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4992785" weight="0.2549751" />
+      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.4992785" weight="0.329602" />
+      <window_info anchor="bottom" id="Python Console" order="11" weight="0.36722305" />
+      <window_info anchor="bottom" id="Terminal" order="10" weight="0.9158317" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.39317182" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="right" id="Database" order="5" weight="0.3299712" />
+      <window_info anchor="right" id="Google Cloud Storage" order="3" />
+      <window_info anchor="right" id="SciView" order="4" weight="0.26224783" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.49289772" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" />
+    </layout>
+    <layout-to-restore>
+      <window_info anchor="right" id="Google Cloud Storage" order="3" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.30286345" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4992785" weight="0.49459785" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="right" id="Database" order="5" />
+      <window_info anchor="bottom" id="Terminal" order="10" weight="0.14888011" />
+      <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.5007215" side_tool="true" weight="0.53109455" />
+      <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.4992785" weight="0.329602" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="SciView" order="4" weight="0.06531049" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.32533014" />
+      <window_info anchor="bottom" id="Python Console" order="11" />
+    </layout-to-restore>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+      <option name="time" value="25" />
+    </breakpoint-manager>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="247">
+            <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tfmodules/eval.py" />
+    <entry file="file://$PROJECT_DIR$/tfmodules/coco_dataload_modules/testcodes/test_dataloader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1691">
+          <caret line="95" selection-start-line="95" selection-end-line="95" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tfmodules/path_manager.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tfmodules/model_builder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3857">
+          <caret line="209" column="67" lean-forward="true" selection-start-line="209" selection-start-column="67" selection-end-line="209" selection-end-column="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tfmodules/utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1615">
+          <caret line="97" selection-start-line="97" selection-end-line="97" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tfmodules/trainer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2812">
+          <caret line="161" column="19" selection-start-line="161" selection-start-column="9" selection-end-line="161" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tfmodules/train_config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="741">
+          <caret line="46" lean-forward="true" selection-start-line="46" selection-end-line="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tfmodules/model_config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="532">
+          <caret line="34" column="25" selection-start-line="34" selection-start-column="13" selection-end-line="34" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="798">
+            <caret line="42" column="15" selection-start-line="42" selection-start-column="15" selection-end-line="42" selection-end-column="15" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="798">
+            <caret line="42" column="15" lean-forward="true" selection-start-line="42" selection-start-column="15" selection-end-line="42" selection-end-column="15" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="912">
+            <caret line="48" column="22" selection-start-line="48" selection-start-column="22" selection-end-line="48" selection-end-column="22" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="1159">
+            <caret line="61" column="2" selection-start-line="61" selection-start-column="2" selection-end-line="61" selection-end-column="2" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ai_challenger_reduced/ai_challenger_train.json" />
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="897">
+          <caret line="109" column="14" selection-start-line="109" selection-start-column="14" selection-end-line="109" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tfmodule/eval.py" />
+    <entry file="file://$PROJECT_DIR$/dataset/ai_challenger_valid.json" />
+    <entry file="file://$PROJECT_DIR$/tfmodule/coco_dataload_modules/dataset_prepare.py" />
+    <entry file="file://$PROJECT_DIR$/tfmodule/utils.py" />
+    <entry file="file://$PROJECT_DIR$/tfmodule/model_builder.py" />
+    <entry file="file://$PROJECT_DIR$/tfmodule/train_config.py" />
+    <entry file="file://$PROJECT_DIR$/tfmodule/coco_dataload_modules/dataset_augment.py" />
+    <entry file="file://$PROJECT_DIR$/tfmodule/data_loader.py" />
+    <entry file="file://$PROJECT_DIR$/tfmodule/path_manager.py" />
+    <entry file="file://$PROJECT_DIR$/tfmodule/trainer.py" />
+    <entry file="file://$PROJECT_DIR$/tfmodule/model_config.py" />
+    <entry file="file://$USER_HOME$/.pyenv/versions/tensorflow-anaconda2/lib/python2.7/site-packages/tensorflow/python/client/session.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="1334" selection-start-line="1334" selection-end-line="1334" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dataset/ai_challenger/ai_challenger_train.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-13933">
+          <caret column="167" lean-forward="true" selection-start-column="167" selection-end-column="167" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.pyenv/versions/tensorflow-anaconda2/lib/python2.7/site-packages/pycocotools/coco.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="344">
+          <caret line="228" selection-start-line="228" selection-end-line="228" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.pyenv/versions/tensorflow-anaconda2/lib/python2.7/site-packages/tensorflow/contrib/framework/python/ops/arg_scope.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="182">
+          <caret line="182" selection-start-line="182" selection-end-line="182" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/install_tensorflow_gpu.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tfmodules/eval.py" />
+    <entry file="file://$PROJECT_DIR$/tfmodules/evaluater.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="43" selection-start-line="43" selection-end-line="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tfmodules/testcodes/test_model_builder.py" />
+    <entry file="file://$USER_HOME$/.pyenv/versions/tensorflow-anaconda2/lib/python2.7/site-packages/tensorflow/python/framework/ops.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="87">
+          <caret line="1591" selection-start-line="1591" selection-end-line="1591" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/export/train_setup_log/run-20181018034208/model_config.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/export/train_setup_log/run-20181018034208/preproc_config.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/export/train_setup_log/run-20181018034208/output_config.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="40" selection-start-column="38" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/export/train_setup_log/run-20181018034208/hourglass_config.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tfmodules/path_manager.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="326">
+          <caret line="37" column="2" selection-start-line="37" selection-start-column="2" selection-end-line="37" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tfmodules/coco_dataload_modules/testcodes/test_dataloader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2266">
+          <caret line="116" column="52" selection-start-line="116" selection-start-column="52" selection-end-line="116" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tfmodules/coco_dataload_modules/dataset_prepare.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2318">
+          <caret line="125" column="17" selection-start-line="125" selection-start-column="10" selection-end-line="125" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tfmodules/train_config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="703">
+          <caret line="37" column="43" selection-start-line="37" selection-start-column="43" selection-end-line="37" selection-end-column="43" />
+          <folding>
+            <element signature="e#645#683#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="2242">
+            <caret line="118" selection-start-line="118" selection-end-line="118" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tfmodules/utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5415">
+          <caret line="285" column="64" selection-start-line="285" selection-start-column="51" selection-end-line="285" selection-end-column="64" />
+          <folding>
+            <element signature="e#645#683#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tfmodules/conv_modules.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="91" column="32" selection-start-line="91" selection-start-column="4" selection-end-line="91" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tfmodules/model_builder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3724">
+          <caret line="196" column="62" selection-start-line="196" selection-start-column="34" selection-end-line="196" selection-end-column="62" />
+          <folding>
+            <element signature="e#645#683#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tfmodules/coco_dataload_modules/dataset_augment.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5472">
+          <caret line="298" column="37" selection-start-line="298" selection-start-column="37" selection-end-line="298" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tfmodules/model_config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="684">
+          <caret line="36" column="31" selection-start-line="36" selection-start-column="31" selection-end-line="36" selection-end-column="31" />
+          <folding>
+            <element signature="e#645#683#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tfmodules/data_loader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="12" column="3" selection-start-line="12" selection-start-column="3" selection-end-line="12" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tfmodules/trainer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="129">
+          <caret line="114" selection-start-line="114" selection-end-line="114" />
+          <folding>
+            <element signature="e#706#744#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

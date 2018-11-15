@@ -1,0 +1,2 @@
+model_checkpoint_path: "/Users/jwkangmacpro2/SourceCodes/tf-tiny-pose-estimation/export/tf_logs/run-20181014154840/pb_and_ckpt/model.ckpt-50"
+all_model_checkpoint_paths: "/Users/jwkangmacpro2/SourceCodes/tf-tiny-pose-estimation/export/tf_logs/run-20181014154840/pb_and_ckpt/model.ckpt-50"

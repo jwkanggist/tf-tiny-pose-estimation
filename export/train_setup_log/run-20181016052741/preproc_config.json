@@ -1,0 +1,1 @@
+"{'heatmap_std': 6.0, 'is_scale': True, 'MAX_AUGMENT_ROTATE_ANGLE_DEG': 15.0, 'STDDEV_RGB': [0.229, 0.224, 0.225], 'is_rotate': True, 'is_crop': True, 'MIN_AUGMENT_ROTATE_ANGLE_DEG': -15.0, 'is_flipping': True, 'MEAN_RGB': [0.485, 0.456, 0.406], 'is_resize_shortest_edge': True}"
