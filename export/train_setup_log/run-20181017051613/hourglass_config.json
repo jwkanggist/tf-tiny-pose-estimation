@@ -1,1 +1,0 @@
-"{'skip_conv_num': 4, 'center_conv_num': 3, 'maxpool_kernel_size': [3, 3], 'updown_rate': 2, 'center_ch_num': 32, 'num_stage': 4}"

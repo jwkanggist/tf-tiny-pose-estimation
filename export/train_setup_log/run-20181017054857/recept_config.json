@@ -1,1 +1,0 @@
-"{'weights_regularizer': None, 'strides': {'r4': 2, 'r1': 2}, 'activation_fn': <function relu at 0x11842bf50>, 'batch_norm_fused': True, 'batch_norm_decay': 0.999, 'kernel_shape': {'r4': [3, 3], 'r1': [7, 7]}, 'biases_initializer': None, 'weights_initializer': <function _initializer at 0x128b25f50>, 'normalizer_fn': <function batch_norm at 0x11ea36758>, 'is_trainable': True}"

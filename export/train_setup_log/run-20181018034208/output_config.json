@@ -1,1 +1,0 @@
-"{'weights_regularizer': <function l2 at 0x124bca320>, 'dropout_keeprate': 0.8, 'activation_fn': None, 'batch_norm_fused': True, 'batch_norm_decay': 0.999, 'kernel_shape': [1, 1], 'biases_initializer': None, 'weights_initializer': <function _initializer at 0x124bca2a8>, 'stride': 1, 'normalizer_fn': <function batch_norm at 0x11a8accf8>, 'is_trainable': True}"
