@@ -125,7 +125,7 @@ class ModelBuilder(object):
                          scope='output'):
 
 
-        with tf.variable_scope(name_or_scope=scope, values=[ch_in]):
+        with tf.variable_scope(name_or_scope=scope, values=[ch_in]) as sc:
             out = slim.conv2d(inputs                =ch_in,
                               num_outputs           =num_outputs,
                               kernel_size           =model_config.kernel_shape,
@@ -149,6 +149,7 @@ class ModelBuilder(object):
                                                 activation_fn=model_config.activation_fn,
                                                 scope       ='batch_norm_outlayer')
 
+            out = tf.identity(input=out, name=sc.name + '_out')
 
         return out
 
