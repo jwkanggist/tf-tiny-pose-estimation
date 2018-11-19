@@ -108,3 +108,5 @@ venv.bak/
 
 #dataset
 ai_challenger*
+*.json
+*.local
